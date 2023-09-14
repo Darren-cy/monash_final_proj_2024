@@ -1,0 +1,83 @@
+@startuml
+' avoid problems with angled crows feet
+skinparam linetype ortho
+
+
+entity DOCUMENT {
+  * document_id : number <<generated>>
+  ---
+  * document_name : text
+  * document_mime : text
+  * document_blob : blob
+}
+
+
+entity ASSESSMENT {
+  * assessment_id : number <<generated>>
+  ---
+  * assessment_name : text
+  assessment_rubric : number <<FK>>
+}
+DOCUMENT |o..o{ ASSESSMENT
+
+
+entity CRITERION {
+  * assessment_id : number <<FK>>
+  * criterion_id : number <<generated>>
+  ---
+  * criterion_name : text
+  * criterion_min : number
+  * criterion_max : number
+}
+ASSESSMENT ||..o{ CRITERION
+
+
+
+
+
+
+
+
+entity AUTHOR {
+ * author_id : number <<generated>>
+ ---
+ * author_name : string
+}
+
+
+entity SUBMISSION {
+  * submission_id number <<generated>>
+  ---
+  * assessment_id : number <<FK>>
+  * submission_time : datetime
+}
+ASSESSMENT ||..o{ SUBMISSION
+
+
+entity SUBMISSION_AUTHOR {
+  * submission_id : number <<FK>>
+  * author_id : number <<FK>>
+}
+SUBMISSION ||..|{ SUBMISSION_AUTHOR
+AUTHOR ||..o{ SUBMISSION_AUTHOR
+
+
+entity SUBMISSION_ATTACHMENT {
+  * submission_id : number <<FK>>
+  * document_id : number <<FK>>
+}
+SUBMISSION ||..|{ SUBMISSION_ATTACHMENT
+DOCUMENT ||..o| SUBMISSION_ATTACHMENT
+
+
+entity RESULT {
+  * assessment_id : number <<FK>>
+  * submission_id : number <<FK>>
+  * criterion_id : number <<FK>>
+  ---
+  * result_value : number
+}
+RESULT }o..|| ASSESSMENT
+RESULT }o..|| CRITERION
+RESULT }o..|| SUBMISSION
+@enduml
