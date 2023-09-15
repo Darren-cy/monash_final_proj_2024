@@ -2,14 +2,27 @@
 ' avoid problems with angled crows feet
 skinparam linetype ortho
 
+entity USER {
+  * user_id : number <<generated>
+  ---
+  * user_email : text <<unique>>
+  * user_name : text
+  * user_password : text
+}
+note right of USER::user_password
+  Salted and hashed password
+end note
+
 
 entity DOCUMENT {
   * document_id : number <<generated>>
   ---
   * document_name : text
+  * document_owner : number <<FK>>
   * document_mime : text
   * document_blob : blob
 }
+DOCUMENT }o..|| USER : has
 
 
 entity ASSESSMENT {
