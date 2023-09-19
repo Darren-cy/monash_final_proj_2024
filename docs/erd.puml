@@ -92,17 +92,38 @@
 
 
     entity RESULT {
-      * assessment_id : number <<FK>>
+      * result_id : number <<generated>>
+      ---
       * submission_id : number <<FK>>
       * criterion_id : number <<FK>>
-      ---
       * result_value : number
       * result_marker : number <<FK>>
       * result_marked : datetime
     }
-    RESULT }o..|| ASSESSMENT
     RESULT }o..|| CRITERION
     RESULT }o..|| SUBMISSION
     RESULT }o..|| USER
   }
+
+together {  
+    entity EVENT_LOG {
+      * event_id : number <<generated>>
+      ---
+      * user_id : number <<FK>>
+      * event_time : datetime
+      * event_action : text
+      * event_object_type : text
+      * event_object_id : number 
+    }
+    EVENT_LOG }o..|| USER
+    note right of EVENT_LOG::event_action
+      One of create, update or delete
+    end note
+    note right of EVENT_LOG::event_object_type
+      Type of the entity affected by the event
+    end note
+    note right of EVENT_LOG::event_object_id
+      Primary key of the entity affected by the event
+    end note
+  }  
 @enduml
