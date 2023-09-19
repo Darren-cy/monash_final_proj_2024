@@ -21,10 +21,11 @@
     ---
     * document_name : text
     * document_owner : number <<FK>>
+    * document_uploaded : datetime
     * document_mime : text
     * document_blob : blob
   }
-  DOCUMENT }o..|| USER : has
+  DOCUMENT }o..|| USER
 
 
   together {
@@ -33,8 +34,12 @@
       ---
       * assessment_name : text
       assessment_rubric : number <<FK>>
+      * assessment_owner : number <<FK>>
+      * assessment_created : datetime
+      * assessment_modified : datetime
     }
     DOCUMENT |o..o{ ASSESSMENT
+    ASSESSMENT }o..|| USER
 
 
     entity CRITERION {
@@ -47,9 +52,6 @@
     }
     ASSESSMENT ||..o{ CRITERION
   }
-
-
-  
 
 
   together {
@@ -91,9 +93,12 @@
       * criterion_id : number <<FK>>
       ---
       * result_value : number
+      * result_marker : number <<FK>>
+      * result_marked : datetime
     }
     RESULT }o..|| ASSESSMENT
     RESULT }o..|| CRITERION
     RESULT }o..|| SUBMISSION
+    RESULT }o..|| USER
   }
 @enduml
