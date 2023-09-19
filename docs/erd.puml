@@ -43,9 +43,9 @@
 
 
     entity CRITERION {
-      * assessment_id : number <<FK>>
       * criterion_id : number <<generated>>
       ---
+      * assessment_id : number <<FK>>
       * criterion_name : text
       * criterion_min : number
       * criterion_max : number
@@ -72,6 +72,8 @@
 
 
     entity SUBMISSION_AUTHOR {
+      * submission_author_id : number <<generated>>
+      ---
       * submission_id : number <<FK>>
       * author_id : number <<FK>>
     }
@@ -80,6 +82,8 @@
 
 
     entity SUBMISSION_ATTACHMENT {
+      * submission_attachment_id : number <<generated>>
+      ---
       * submission_id : number <<FK>>
       * document_id : number <<FK>>
     }
