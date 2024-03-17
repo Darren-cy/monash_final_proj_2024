@@ -28,7 +28,7 @@ def create_app(test_config=None):
     db = SQLAlchemy(app)
     
     # Create the user model
-    from .models import user
+    from .models import User
     
     # Create the database tables
     with app.app_context():
