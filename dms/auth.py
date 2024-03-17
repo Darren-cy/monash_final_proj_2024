@@ -1,10 +1,10 @@
-from flask import Blueprint, flash, g, redirect, render_template, request, session, url_for
+from flask import Blueprint, flash, g, redirect, render_template, request, session, url_for, current_app
 import functools
+from dms.models import user
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from dms.db import get_db
-
 bp = Blueprint('auth', __name__, url_prefix='/auth')
+
 
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
@@ -12,74 +12,68 @@ def register():
         username = request.form['username']
         password = request.form['password']
         error = None
-        
+
         if not username:
             error = "Username is required"
         elif not password:
             error = "Password is required"
-        
+
         if error is None:
-            db = get_db()
+            db = current_app.db
             try:
-                db.execute(
-                    "INSERT INTO user (username, password) values (?, ?)",
-                    (username, generate_password_hash(password))
-                )
-                db.commit()
-            except db.IntegrityError:
+                db.session.add(user(username, generate_password_hash(
+                    password), username + "@example.com"))
+                db.session.commit()
+            except:
                 error = f"Username {username} is already registered."
             else:
                 return redirect(url_for("auth.login"))
-        
+
         flash(error)
-    
+
     return render_template("auth/register.html")
+
 
 @bp.route("/login", methods=('GET', 'POST'))
 def login():
+    # Login not working due to cant retrieve user from db
     if request.method == "POST":
         username = request.form['username']
         password = request.form["password"]
         error = None
-        
+
         if not username:
             error = "Username is required."
         elif not password:
             error = "Password is required."
-        
+
         if error is None:
-            db = get_db()
-            user = db.execute(
-                "SELECT * FROM user WHERE username = ?",
-                (username,)
-            ).fetchone()
-            
+            db = current_app.db
+            user = db.select(user).where(user.username == username).execute().fetchone()
             if user is None:
                 error = "Username is incorrect."
             elif not check_password_hash(user['password'], password):
                 error = "Password is incorrect."
-        
+
         if user and error is None:
             session.clear()
             session["user_id"] = user["id"]
             return redirect(url_for("index"))
-        
+
         flash(error)
-        
+
     return render_template("auth/login.html")
 
 
 @bp.before_app_request
 def load_logged_in_user():
     userId = session.get("user_id")
-    
+
     if userId is None:
         g.user = None
     else:
-        g.user = get_db().execute(
-            "SELECT * FROM user WHERE id = ?",
-            (userId,)
-        ).fetchone()
+        g.user = user.query.filter_by(id=userId).first()
+
 
 @bp.route("/logout")
 def logout():

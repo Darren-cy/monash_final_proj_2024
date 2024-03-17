@@ -1,13 +1,16 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, g, current_app
 import os
+from dotenv import load_dotenv
+from flask_sqlalchemy import SQLAlchemy
 
 
 
 def create_app(test_config=None):
+    load_dotenv()
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY='dev',
-        DATABASE=os.path.join(app.instance_path, 'dms.sqlite')
+        SQLALCHEMY_DATABASE_URI=os.environ.get('DATABASE_URL'),
     )
     
     if test_config is None:
@@ -20,16 +23,24 @@ def create_app(test_config=None):
         os.makedirs(app.instance_path)
     except FileExistsError:
         pass
+    global db
+    # Initialize the database 
+    db = SQLAlchemy(app)
     
+    # Create the user model
+    from .models import user
+    
+    # Create the database tables
+    with app.app_context():
+        db.create_all()
+        db.session.commit()
+        current_app.db = db
+    # Register the index route
     @app.route('/')
     def index():
         return render_template('dashboard.html')
     
-    from . import db
-    db.init_app(app)
-    
     from . import auth
     app.register_blueprint(auth.bp)
-    
     return app
 
