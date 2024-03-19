@@ -26,8 +26,13 @@ py -m pip install -r requirements.txt
 Install the latest Postgresql and run the following commands in the terminal:
 
 ```
-psql
+psql -U posgres
+```
 
+Then input the password when installing postgresql and run these commands:
+
+
+```
 CREATE DATABASE <database_name>;
 
 CREATE USER <username> WITH PASSWORD 'password';
