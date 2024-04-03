@@ -23,7 +23,8 @@
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
+
 
 # Thumbnails
 ._*
@@ -276,5 +277,8 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# node module
+node_modules/
 
 # End of https://www.toptal.com/developers/gitignore/api/python,venv,visualstudiocode,windows,macos,linux
