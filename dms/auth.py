@@ -1,7 +1,8 @@
 from flask import Blueprint, flash, g, redirect, render_template, request, session, url_for, current_app
 import functools
-from dms.models import User
 from werkzeug.security import generate_password_hash, check_password_hash
+from dms.models import User
+from dms import db
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -19,10 +20,9 @@ def register():
             error = "Password is required"
 
         if error is None:
-            db = current_app.db
             try:
-                db.session.add(User(username, generate_password_hash(
-                    password), username + "@example.com"))
+                user = User(username, generate_password_hash(password), username + "@example.com")
+                db.session.add(user)
                 db.session.commit()
             except:
                 error = f"Username {username} is already registered."
@@ -48,8 +48,8 @@ def login():
             error = "Password is required."
 
         if error is None:
-            db = current_app.db
-            user = db.session.query(User).filter_by(username=username).first()
+            user = db.session.query(User).filter_by(name=username).first()
+            
             if user is None:
                 error = "Username is incorrect."
             elif not check_password_hash(user.password, password):
@@ -72,7 +72,7 @@ def load_logged_in_user():
     if userId is None:
         g.user = None
     else:
-        g.user = current_app.db.session.query(User).filter_by(id=userId).first()
+        g.user = db.session.query(User).filter_by(id=userId).first()
 
 
 @bp.route("/logout")

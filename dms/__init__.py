@@ -22,16 +22,12 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 # Create the user model
-from .models import User
+from .models import *
 
 # Create the database tables
 with app.app_context():
-    try:
-        db.create_all()
-        db.session.commit()
-        current_app.db = db
-    except:
-        pass
+    db.create_all()
+    db.session.commit()
 # Register the index route
 
 @app.route('/')
