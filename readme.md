@@ -3,7 +3,7 @@
 FIT3161-62 Project, Team CS09
 
 
-## Install
+## Setup and run backend
 
 With python (3.12) installed, switch to the source directory and create a virtual environment:
 
@@ -45,12 +45,31 @@ ALTER DATABASE <database_name> OWNER TO <username>;
 Create the .env file which contains the following info:
 ```
 DATABASE_URL=postgresql://<username>:<password>@localhost:5432/<database_name>
+JWT_SECRET_KEY="YourSecretKey"
+VITE_API_URL="http://localhost:5000"
+```
+
+Create the .flaskenv file which contains the following info:
+
+```
+FLASK_APP = dms
+FLASK_ENV= development
+FLASK_DEBUG = True
 ```
 
 And run the app:
 
 ```
-flask --app dms run --debug
+flask run
+```
+
+# Setup and run frontend
+
+With nodejs installed, run the following commands:
+```
+cd frontend
+npm install
+npm run dev
 ```
 
 (Instructions for development only, not suitable for distribution)
