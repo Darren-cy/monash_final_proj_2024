@@ -2,6 +2,9 @@ from flask import Blueprint, flash, g, redirect, render_template, request, sessi
 import functools
 from dms.models import User
 from werkzeug.security import generate_password_hash, check_password_hash
+from email_validator import validate_email, EmailNotValidError
+from sqlalchemy.exc import IntegrityError, NoResultFound
+from sqlalchemy import select
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -9,23 +12,32 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
     if request.method == 'POST':
-        username = request.form['username']
+        email = request.form['email']
         password = request.form['password']
+        password_confirmation = request.form["confirm-password"]
         error = None
 
-        if not username:
-            error = "Username is required"
+        if not email:
+            error = "Email is required"
         elif not password:
             error = "Password is required"
+        elif password != password_confirmation:
+            error = "Passwords must match"
+        else:
+            try:
+                emailInfo = validate_email(email, check_deliverability=False)
+                email = emailInfo.normalized
+            except EmailNotValidError as e:
+                error = str(e)
 
         if error is None:
-            db = current_app.db
             try:
-                db.session.add(User(username, generate_password_hash(
-                    password), username + "@example.com"))
-                db.session.commit()
-            except:
-                error = f"Username {username} is already registered."
+                user = User(name=email, email=email, password=generate_password_hash(password))
+                session = current_app.db.session
+                session.add(user)
+                session.commit()
+            except IntegrityError:
+                error = f"An account with the email {email} is already registered."
             else:
                 return redirect(url_for("auth.login"))
 
@@ -38,24 +50,33 @@ def register():
 def login():
     # Login not working due to cant retrieve user from db
     if request.method == "POST":
-        username = request.form['username']
+        email = request.form['email']
         password = request.form["password"]
         error = None
 
-        if not username:
+        if not email:
             error = "Username is required."
         elif not password:
             error = "Password is required."
+        else:
+            try:
+                emailInfo = validate_email(email, check_deliverability=False)
+                email = emailInfo.normalized
+            except EmailNotValidError as e:
+                error = str(e)
 
         if error is None:
-            db = current_app.db
-            user = db.session.query(User).filter_by(username=username).first()
-            if user is None:
-                error = "Username is incorrect."
-            elif not check_password_hash(user.password, password):
-                error = "Password is incorrect."
+            try:
+                statement = select(User).where(User.email == email)
+                dbsession = current_app.db.session
+                user = dbsession.scalars(statement).one()
+            except NoResultFound:
+                error = "No account found."
+            else:
+                if not check_password_hash(user.password, password):
+                    error = "Password is incorrect."
 
-        if user and error is None:
+        if error is None:
             session.clear()
             session["user_id"] = user.id
             return redirect(url_for("index"))

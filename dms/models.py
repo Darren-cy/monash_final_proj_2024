@@ -1,18 +1,17 @@
 from . import db
-from flask_sqlalchemy import SQLAlchemy
-from flask import current_app, g
 
+from sqlalchemy.orm import Mapped, mapped_column
 
 
 class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    password = db.Column(db.String(500), nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
+    """An application user."""
+    __tablename__ = "user"
+
+    id: Mapped[int] = mapped_column("user_id", primary_key=True)
+    name: Mapped[str] = mapped_column("user_name", nullable=False)
+    email: Mapped[str] = mapped_column("user_email", unique=True, nullable=False)
+    password: Mapped[str] = mapped_column("user_password", nullable=False)
+
     def __repr__(self):
-        return '<User %r>' % self.username
+        return f'<User {self.name} ({self.email})>'
     
-    def __init__(self, username, password, email):
-        self.username = username
-        self.password = password
-        self.email = email

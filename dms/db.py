@@ -14,7 +14,7 @@ submission_author = Table(
     Column("author_id", ForeignKey("author.author_id"), primary_key=True)
 )
 
-submission_attachment= Table(
+submission_attachment = Table(
     "submission_attachment", Base.metadata,
     Column("submission_id", ForeignKey("submission.submission_id"), primary_key=True),
     Column("attachment_id", ForeignKey("document.document_id"), primary_key=True)
@@ -27,7 +27,7 @@ class User(Base):
 
     id: Mapped[int] = mapped_column("user_id", primary_key=True)
     name: Mapped[str] = mapped_column("user_name", nullable=False)
-    email: Mapped[str] = mapped_column("user_email", nullable=False)
+    email: Mapped[str] = mapped_column("user_email", unique=True, nullable=False)
     password: Mapped[str] = mapped_column("user_password", nullable=False)
     documents: Mapped[List["Document"]] = Relationship(back_populates="owner")
     assessments: Mapped[List["Assessment"]] = Relationship(back_populates="owner")

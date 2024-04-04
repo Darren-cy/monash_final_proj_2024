@@ -7,12 +7,16 @@
 {% block content %}
 	<form method="post">
 		<div>
-			<label for="username">Username</label>
-			<input type="text" name="username" id="username" required />
+			<label for="email">Email</label>
+			<input type="email" name="email" id="email" required />
 		</div>
 		<div>
 			<label for="password">Password</label>
 			<input type="password" name="password" id="password" required />
+		</div>
+		<div>
+			<label for="confirm-password">Confirm password</label>
+			<input type="password" name="confirm-password" id="confirm-password" required />
 		</div>
 		<div>
 			<input type="submit" value="Register">
