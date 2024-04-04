@@ -3,14 +3,17 @@ from flask_cors import CORS
 from flask_migrate import Migrate
 from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
-
+from flask_jwt_extended import JWTManager
 
 # Load the environment variables
 load_dotenv()
 # Create the Flask app
 app = Flask(__name__, instance_relative_config=True)
 # Enable CORS
-CORS(app)
+CORS(app, resources={r"*": {"origins": "*"}}, supports_credentials=True)
+
+# Initialize the JWT manager
+jwt = JWTManager(app)
 
 # Load the configuration
 app.config.from_object('dms.config.DevelopmentConfig')
@@ -34,6 +37,8 @@ with app.app_context():
 def index():
     return render_template('dashboard.html')
 
-from . import auth
+
+from . import auth, api
 app.register_blueprint(auth.bp)
+app.register_blueprint(api.bp)
 

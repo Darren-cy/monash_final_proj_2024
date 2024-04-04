@@ -124,4 +124,4 @@ class Result(db.Model):
     marked: Mapped[datetime] = mapped_column("result_marked")
     submission: Mapped["Submission"] = Relationship()
     criterion: Mapped["Criterion"] = Relationship()
-    marker: Mapped["User"] = Relationship()
+    marker: Mapped["User"] = Relationship( )
