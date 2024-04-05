@@ -1,12 +1,15 @@
-from flask import Blueprint, flash, g, redirect, render_template, request, session, url_for, current_app, abort
 import functools
-from dms.models import User
-from werkzeug.security import generate_password_hash, check_password_hash
-from email_validator import validate_email, EmailNotValidError
-from sqlalchemy.exc import IntegrityError, NoResultFound
-from sqlalchemy import select
+
+from email_validator import EmailNotValidError, validate_email
+from flask import (Blueprint, abort, current_app, flash, g, redirect,
+                   render_template, request, session, url_for)
+from itsdangerous.exc import BadTimeSignature, SignatureExpired
 from itsdangerous.url_safe import URLSafeTimedSerializer
-from itsdangerous.exc import SignatureExpired, BadTimeSignature
+from sqlalchemy import select
+from sqlalchemy.exc import IntegrityError, NoResultFound
+from werkzeug.security import check_password_hash, generate_password_hash
+
+from dms.models import User
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -37,12 +40,14 @@ def register():
 
         if error is None:
             try:
-                user = User(name=name, email=email, password=generate_password_hash(password))
+                user = User(name=name, email=email,
+                            password=generate_password_hash(password))
                 session = current_app.db.session
                 session.add(user)
                 session.commit()
             except IntegrityError:
-                error = f"An account with the email {email} is already registered."
+                error = f"An account with the email {
+                    email} is already registered."
             else:
                 flash("Account created.")
                 return redirect(url_for("auth.login"))
@@ -105,26 +110,28 @@ def forgot_password():
                 email = emailInfo.normalized
             except EmailNotValidError:
                 error = "You must enter a valid email address."
-        
+
         if not error:
-            serializer = URLSafeTimedSerializer(current_app.secret_key, salt="reset-password")
+            serializer = URLSafeTimedSerializer(
+                current_app.secret_key, salt="reset-password")
             flash(serializer.dumps(email))
             flash("A password reset link has been sent.")
             return redirect(url_for("auth.login"))
-    
+
     return render_template("auth/forgot-password.html")
 
 
 @bp.route("/reset-password/<token>", methods=('GET', 'POST'))
 def reset_password(token):
-    serializer = URLSafeTimedSerializer(current_app.secret_key, salt="reset-password")
+    serializer = URLSafeTimedSerializer(
+        current_app.secret_key, salt="reset-password")
     try:
         token_email = serializer.loads(token, max_age=3600)
         user = User.query.filter_by(email=token_email).one()
     except (SignatureExpired, BadTimeSignature, NoResultFound) as e:
         current_app.logger.info("Password reset with invalid token: %s", e)
         abort(404)
-    
+
     if request.method == "POST":
         form_email = request.form["email"]
         password = request.form["password"]
@@ -139,15 +146,15 @@ def reset_password(token):
             error = "Password is required."
         elif password != conf_password:
             error = "Passwords must match."
-        
+
         if error is None:
             user.password = generate_password_hash(password)
             current_app.db.session.commit()
             flash("Your password has been changed.")
             return redirect(url_for("auth.login"))
-    
+
         flash(error)
-    
+
     return render_template("auth/reset-password.html")
 
 
@@ -158,7 +165,8 @@ def load_logged_in_user():
     if userId is None:
         g.user = None
     else:
-        g.user = current_app.db.session.query(User).filter_by(id=userId).first()
+        g.user = current_app.db.session.query(
+            User).filter_by(id=userId).first()
 
 
 @bp.route("/logout")
