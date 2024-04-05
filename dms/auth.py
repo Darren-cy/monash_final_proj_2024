@@ -12,12 +12,15 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
     if request.method == 'POST':
+        name = request.form['name'].strip()
         email = request.form['email']
         password = request.form['password']
         password_confirmation = request.form["confirm-password"]
         error = None
 
-        if not email:
+        if not name:
+            error = "Name is required."
+        elif not email:
             error = "Email is required"
         elif not password:
             error = "Password is required"
@@ -32,13 +35,14 @@ def register():
 
         if error is None:
             try:
-                user = User(name=email, email=email, password=generate_password_hash(password))
+                user = User(name=name, email=email, password=generate_password_hash(password))
                 session = current_app.db.session
                 session.add(user)
                 session.commit()
             except IntegrityError:
                 error = f"An account with the email {email} is already registered."
             else:
+                flash("Account created.")
                 return redirect(url_for("auth.login"))
 
         flash(error)
