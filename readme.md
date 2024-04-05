@@ -57,6 +57,14 @@ FLASK_ENV= development
 FLASK_DEBUG = True
 ```
 
+Create all the tables in the postgresql database
+
+```
+flask db init
+flask db migrate
+flask db upgrade
+```
+
 And run the app:
 
 ```
