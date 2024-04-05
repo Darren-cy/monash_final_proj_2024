@@ -1,10 +1,12 @@
-from flask import Blueprint, flash, g, redirect, render_template, request, session, url_for, current_app
+from flask import Blueprint, flash, g, redirect, render_template, request, session, url_for, current_app, abort
 import functools
 from dms.models import User
 from werkzeug.security import generate_password_hash, check_password_hash
 from email_validator import validate_email, EmailNotValidError
 from sqlalchemy.exc import IntegrityError, NoResultFound
 from sqlalchemy import select
+from itsdangerous.url_safe import URLSafeTimedSerializer
+from itsdangerous.exc import SignatureExpired, BadTimeSignature
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -52,7 +54,6 @@ def register():
 
 @bp.route("/login", methods=('GET', 'POST'))
 def login():
-    # Login not working due to cant retrieve user from db
     if request.method == "POST":
         email = request.form['email']
         password = request.form["password"]
@@ -88,6 +89,66 @@ def login():
         flash(error)
 
     return render_template("auth/login.html")
+
+
+@bp.route("/forgot-password", methods=('GET', 'POST'))
+def forgot_password():
+    if request.method == "POST":
+        email = request.form['email']
+        error = None
+
+        if not email:
+            error = "Email is required."
+        else:
+            try:
+                emailInfo = validate_email(email)
+                email = emailInfo.normalized
+            except EmailNotValidError:
+                error = "You must enter a valid email address."
+        
+        if not error:
+            serializer = URLSafeTimedSerializer(current_app.secret_key, salt="reset-password")
+            flash(serializer.dumps(email))
+            flash("A password reset link has been sent.")
+            return redirect(url_for("auth.login"))
+    
+    return render_template("auth/forgot-password.html")
+
+
+@bp.route("/reset-password/<token>", methods=('GET', 'POST'))
+def reset_password(token):
+    serializer = URLSafeTimedSerializer(current_app.secret_key, salt="reset-password")
+    try:
+        token_email = serializer.loads(token, max_age=3600)
+        user = User.query.filter_by(email=token_email).one()
+    except (SignatureExpired, BadTimeSignature, NoResultFound) as e:
+        current_app.logger.info("Password reset with invalid token: %s", e)
+        abort(404)
+    
+    if request.method == "POST":
+        form_email = request.form["email"]
+        password = request.form["password"]
+        conf_password = request.form["confirm-password"]
+        error = None
+
+        if not form_email:
+            error = "Email is required"
+        elif token_email != form_email:
+            error = "Email is incorrect."
+        elif not password:
+            error = "Password is required."
+        elif password != conf_password:
+            error = "Passwords must match."
+        
+        if error is None:
+            user.password = generate_password_hash(password)
+            current_app.db.session.commit()
+            flash("Your password has been changed.")
+            return redirect(url_for("auth.login"))
+    
+        flash(error)
+    
+    return render_template("auth/reset-password.html")
 
 
 @bp.before_app_request
