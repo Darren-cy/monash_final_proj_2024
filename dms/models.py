@@ -58,6 +58,7 @@ class Document(db.Model):
 class Author(db.Model):
     """A submission author."""
     __tablename__ = "author"
+    __table_args__ = {"extend_existing": True}
 
     id: Mapped[int] = mapped_column("author_id", primary_key=True)
     name: Mapped[str] = mapped_column("author_name", nullable=False)
