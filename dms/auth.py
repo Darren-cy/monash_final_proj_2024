@@ -114,9 +114,14 @@ def forgot_password():
         if not error:
             serializer = URLSafeTimedSerializer(
                 current_app.secret_key, salt="reset-password")
-            flash(serializer.dumps(email))
+            current_app.logger.info(
+                f'Password reset link for {email}: {url_for(
+                    "auth.reset_password", token=serializer.dumps(email),
+                    _external=True)}')
             flash("A password reset link has been sent.")
             return redirect(url_for("auth.login"))
+
+        flash(error)
 
     return render_template("auth/forgot-password.html")
 
