@@ -1,10 +1,10 @@
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 
 const DocumentProcessing = () => {
   const [doc, setDoc] = useState("");
   const editorRef = useRef<any>(null);
-  const apikey = process.env.REACT_APP_TINYMCE_API_KEY;
+  const apikey: string | undefined  = import.meta.env.REACT_APP_TINYMCE_API_KEY;
   const log = () => {
     if (editorRef.current) {
       console.log(editorRef.current.getContent());
@@ -56,7 +56,7 @@ const DocumentProcessing = () => {
           }}
         />
         <button onClick={log}>Log editor content</button>
-        {doc? <pre>{doc}</pre>: null}
+        {doc ? <pre>{doc}</pre> : null}
       </div>
     </div>
   );
