@@ -4,10 +4,11 @@ import { Editor } from "@tinymce/tinymce-react";
 const DocumentProcessing = () => {
   const [doc, setDoc] = useState("");
   const editorRef = useRef<any>(null);
-  const apikey: string | undefined  = import.meta.env.REACT_APP_TINYMCE_API_KEY;
+  const apikey: string | undefined  = import.meta.env.VITE_TINYMCE_API_KEY;
   const log = () => {
     if (editorRef.current) {
       console.log(editorRef.current.getContent());
+      console.log(apikey);
       setDoc(editorRef.current.getContent());
     }
   };
@@ -35,7 +36,7 @@ const DocumentProcessing = () => {
       </div>
       <div>
         <Editor
-          apiKey={apikey}
+          apiKey= {apikey}
           onInit={(evt, editor) => (editorRef.current = editor)}
           initialValue="<p>This is the initial content of the editor.</p>"
           init={{
