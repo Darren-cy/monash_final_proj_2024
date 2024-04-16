@@ -5,6 +5,7 @@ const DocumentProcessing = () => {
   const [doc, setDoc] = useState("");
   const editorRef = useRef<any>(null);
   const apikey: string | undefined  = import.meta.env.VITE_TINYMCE_API_KEY;
+  const backendUrl: string | undefined = import.meta.env.VITE_API_URL;
   const log = () => {
     if (editorRef.current) {
       console.log(editorRef.current.getContent());
@@ -16,7 +17,7 @@ const DocumentProcessing = () => {
     <div>
       <div>
         <iframe
-          src="https://mozilla.github.io/pdf.js/web/viewer.html"
+          src={`${backendUrl}/static/report.pdf`}
           style={{
             width: "50%",
             height: "600px",
@@ -25,7 +26,7 @@ const DocumentProcessing = () => {
           }}
         ></iframe>
         <iframe
-          src="https://mozilla.github.io/pdf.js/web/viewer.html"
+          src={`${backendUrl}/static/report.pdf`}
           style={{
             width: "50%",
             height: "600px",
@@ -40,7 +41,7 @@ const DocumentProcessing = () => {
           onInit={(evt, editor) => (editorRef.current = editor)}
           initialValue="<p>This is the initial content of the editor.</p>"
           init={{
-            height: 500,
+            height: 200,
             menubar: false,
             plugins: [
               "advlist autolink lists link image charmap print preview anchor",
