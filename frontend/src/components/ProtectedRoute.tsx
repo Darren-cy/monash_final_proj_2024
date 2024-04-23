@@ -1,12 +1,11 @@
-import { useEffect, useState, ReactNode  } from "react";
+import { useEffect, useState, ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 import api from "../api";
 import { ACCESS_TOKEN } from "../constants";
 import { jwtDecode } from "jwt-decode";
 
 const ProtectedRoute = ({ children }: { children: ReactNode }) => {
-
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(true);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
   useEffect(() => {
     auth().catch(() => setIsAuthenticated(false));
@@ -34,13 +33,16 @@ const ProtectedRoute = ({ children }: { children: ReactNode }) => {
       return;
     }
     const { exp }: { exp: number } = jwtDecode(accessToken);
-    if (Date.now()/1000 > exp) {
+    if (Date.now() / 1000 > exp) {
       await refreshToken();
     } else {
       setIsAuthenticated(true);
     }
   };
 
+  if (isAuthenticated === null) {
+    return <div>Loading...</div>;
+  }
   return isAuthenticated ? children : <Navigate to="/login" />;
 };
 

@@ -6,6 +6,7 @@ import { ACCESS_TOKEN } from "../constants";
 const Form = ({ route, method }: { route: string; method: string }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
   const navigate = useNavigate();
 
   const name = method === "login" ? "Login" : "Register";
@@ -13,10 +14,22 @@ const Form = ({ route, method }: { route: string; method: string }) => {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
-      const response = await api.post(route, {
-        username,
-        password,
-      });
+      let response;
+      // If the method is login, send a POST request to the login endpoint
+      if (method === "login") {
+        //
+        response = await api.post(route, {
+          username,
+          password,
+        });
+      } else {
+        // If the method is register, send a POST request to the register endpoint
+        response = await api.post(route, {
+          username,
+          password,
+          email,
+        });
+      }
       if (method === "login") {
         alert("User logged in successfully");
         localStorage.setItem(ACCESS_TOKEN, response.data.accessToken);
@@ -27,7 +40,11 @@ const Form = ({ route, method }: { route: string; method: string }) => {
       }
     } catch (error) {
       console.error(error);
-      alert("Invalid credentials");
+      if (method === "login") {
+        alert("Invalid credentials");
+      } else {
+        alert("Username already exists");
+      }
     }
   };
 
@@ -39,13 +56,25 @@ const Form = ({ route, method }: { route: string; method: string }) => {
         placeholder="Username"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
+        required
       />
       <input
         type="password"
         placeholder="Password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
+        required
       />
+      {method === "register" && (
+        <input
+          type="text"
+          placeholder="Email"
+          style={{ display: method === "register" ? "block" : "none" }}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+      )}
       <button className="form-button" type="submit">
         {name}
       </button>
