@@ -4,7 +4,6 @@ from flask_migrate import Migrate
 from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
-import os
 
 # Load the environment variables
 load_dotenv()
@@ -43,22 +42,9 @@ def index():
 
 from dms import auth
 from dms.api import user_api
+from dms.api import display_upload_api
 app.register_blueprint(auth.bp)
 app.register_blueprint(user_api.bp)
+app.register_blueprint(display_upload_api.bp)
 
 
-@app.route('/static/<path:path>')
-def send_static(path):
-    return send_from_directory('static', path)
-
-
-@app.route('/upload', methods=['POST'])
-def upload():
-    try:
-        file = request.files['file']
-        # Create a folder named uploads in the static folder
-        os.makedirs('dms/static/uploads/', exist_ok=True)
-        file.save('dms/static/uploads/' + file.filename)
-        return 'File uploaded successfully', 200
-    except Exception as e:
-        return str(e), 400
