@@ -41,9 +41,10 @@ def index():
     return render_template('dashboard.html')
 
 
-from . import auth, api
+from dms import auth
+from dms.api import user_api
 app.register_blueprint(auth.bp)
-app.register_blueprint(api.bp)
+app.register_blueprint(user_api.bp)
 
 
 @app.route('/static/<path:path>')
