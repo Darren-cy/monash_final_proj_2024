@@ -1,11 +1,12 @@
 import React, { useRef, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
+import FileDisplay from "../components/FileDisplay";
 
 const DocumentProcessing = () => {
   const [doc, setDoc] = useState("");
   const editorRef = useRef<any>(null);
-  const apikey: string | undefined  = import.meta.env.VITE_TINYMCE_API_KEY;
-  const backendUrl: string | undefined = import.meta.env.VITE_API_URL;
+  const apikey: string | undefined = import.meta.env.VITE_TINYMCE_API_KEY;
+  const backendUrlApi: string | undefined = import.meta.env.VITE_BACKEND_API_URL
   const log = () => {
     if (editorRef.current) {
       console.log(editorRef.current.getContent());
@@ -14,31 +15,13 @@ const DocumentProcessing = () => {
     }
   };
   return (
-    <div>
-      <div>
-        <iframe
-          src={`${backendUrl}/static/report.pdf`}
-          style={{
-            width: "50%",
-            height: "600px",
-            border: "none",
-            marginTop: "20px",
-          }}
-        ></iframe>
-        <iframe
-          src={`${backendUrl}/static/report.pdf`}
-          style={{
-            width: "50%",
-            height: "600px",
-            border: "none",
-            marginTop: "20px",
-          }}
-        ></iframe>
-      </div>
+    <>
+      <FileDisplay fileUrl={`${backendUrlApi}/static/report.pdf`} side="left" />
+      <FileDisplay fileUrl={`${backendUrlApi}/static/uploads/hello.pdf`} side="right" />
       <div>
         <Editor
-          apiKey= {apikey}
-          onInit={(evt, editor) => (editorRef.current = editor)}
+          apiKey={apikey}
+          onInit={(_, editor) => (editorRef.current = editor)}
           initialValue="<p>This is the initial content of the editor.</p>"
           init={{
             height: 200,
@@ -60,7 +43,7 @@ const DocumentProcessing = () => {
         <button onClick={log}>Log editor content</button>
         {doc ? <pre>{doc}</pre> : null}
       </div>
-    </div>
+    </>
   );
 };
 
