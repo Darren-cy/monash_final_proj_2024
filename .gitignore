@@ -284,4 +284,7 @@ node_modules/
 #Flask migrate
 migrations/
 
+# PDF
+*.pdf
+
 # End of https://www.toptal.com/developers/gitignore/api/python,venv,visualstudiocode,windows,macos,linux
