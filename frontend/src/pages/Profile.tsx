@@ -1,17 +1,18 @@
 import { useState, useEffect } from 'react'
 import api from '../api';
 const Profile = () => {
-    const [user, setUser] = useState<any>(null);
+    const [user, setUser] = useState<{username: string, email: string} | null>(null);
 
     useEffect(() => {
         // Fetch user data based on the user name from the backend
         const fetchUser = async () => {
             try {
-                const response = await api.get('/api/v1.0/user');
+                const response = await api.get('/api/v1.0/profile');
                 const data = await response.data;
                 setUser(data);
             } catch (error) {
                 console.error('Error fetching user data:', error);
+                alert('Error fetching user data');
             }
         };
 
@@ -25,7 +26,7 @@ const Profile = () => {
     return (
         <div>
             <h1>Profile</h1>
-            <p>Name: {user.name}</p>
+            <p>Name: {user.username}</p>
             <p>Email: {user.email}</p>
         </div>
     );

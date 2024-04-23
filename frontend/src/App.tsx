@@ -6,6 +6,7 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import DocumentProcessing from "./pages/DocumentProcessing";
 import Upload from "./pages/Upload";
+import Profile from "./pages/Profile";
 
 function Logout() {
   localStorage.clear();
@@ -57,6 +58,10 @@ function App() {
               <Logout />
             </ProtectedRoute>
           }
+        />
+        <Route
+          path="/profile"
+          element={<ProtectedRoute>{<Profile />}</ProtectedRoute>}
         />
         <Route path="*" element={<NotFound />} />
       </Routes>
