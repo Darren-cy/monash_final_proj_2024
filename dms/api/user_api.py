@@ -76,8 +76,12 @@ def logout():
         return jsonify({"error": {e}}), 400
 
 
-@bp.route('/protected', methods=['GET', 'POST'])
+@bp.route('/profile', methods=['GET', 'POST'])
 @jwt_required()
-def protected():
-    current_user = get_jwt_identity()
-    return jsonify(foo='bar',user = current_user), 200
+def profile():
+    try:
+        current_user = get_jwt_identity()
+        user = models.User.query.filter_by(name=current_user).first()
+        return jsonify({"username": user.name, "email": user.email}), 200
+    except Exception as e:
+        return jsonify({"error": {e}}), 400
