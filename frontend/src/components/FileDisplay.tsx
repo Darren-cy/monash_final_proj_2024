@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
+import { Navigate } from "react-router-dom";
 import api from "../api";
 import { FileUpload } from "primereact/fileupload";
-
-
 interface Props {
   fileUrl: string;
   side: "left" | "right";
@@ -13,12 +12,13 @@ const FileDisplay = ({ fileUrl, side }: Props) => {
   const [fileType, setFileType] = useState<string>("");
   const backendUrl = import.meta.env.VITE_API_URL;
 
+
   useEffect(() => {
     const fetchFile = async () => {
       try {
         const response = await api.get(fileUrl);
         setFile(response.data);
-        setFileType(response.headers["content-type"])
+        setFileType(response.headers["content-type"]);
       } catch (error) {
         console.error(error);
       }
@@ -34,6 +34,8 @@ const FileDisplay = ({ fileUrl, side }: Props) => {
       .post(`${backendUrl}/api/v1.0/upload`, formData)
       .then((response) => {
         setFile(response.data);
+        setFileType(response.headers["content-type"]);
+        window.location.reload();
       })
       .catch((error) => {
         console.error(error);
@@ -42,11 +44,9 @@ const FileDisplay = ({ fileUrl, side }: Props) => {
 
   return (
     <div
-      style={{
-        width: "50%",
-        display: "inline-block",
-        verticalAlign: "top",
-      }}
+      className={`p-1 w-1/2 h-500 inline-block align-top outline-black outline-offset-2 outline-1  ${
+        side === "left" ? "pr-1" : "pl-1"
+      }`}
     >
       {file ? (
         <div>
@@ -57,7 +57,9 @@ const FileDisplay = ({ fileUrl, side }: Props) => {
           ) : fileType.includes("audio") ? (
             <audio controls src={fileUrl} />
           ) : fileType.includes("pdf") ? (
-            <iframe src={fileUrl} width="100%" height="500px" />
+            <div className="w-full overflow-auto resize">
+              <iframe src={fileUrl} height="100%" width="100%" />
+            </div>
           ) : (
             <div>
               <a href={fileUrl} target="_blank" rel="noopener noreferrer">
@@ -72,7 +74,7 @@ const FileDisplay = ({ fileUrl, side }: Props) => {
             <FileUpload
               name="file"
               url={`${backendUrl}/api/v1.0/upload`}
-              uploadHandler={handleUpload}
+              onUpload={handleUpload}
               accept="image/*,application/pdf,text/*,video/*,audio/*"
               maxFileSize={1024 * 1024 * 10} // 10MB
               emptyTemplate={
