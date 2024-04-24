@@ -7,6 +7,7 @@ import Dashboard from "./pages/Dashboard";
 import DocumentProcessing from "./pages/DocumentProcessing";
 import Upload from "./pages/Upload";
 import Profile from "./pages/Profile";
+import Home from "./pages/Home";
 
 function Logout() {
   localStorage.clear();
@@ -17,14 +18,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route
