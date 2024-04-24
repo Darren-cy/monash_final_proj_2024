@@ -1,5 +1,6 @@
 import { useState } from "react";
 import api from "../api";
+import NavigationBar from "../components/NavigationBar";
 
 const Home = () => {
   const [message, setMessage] = useState("");
@@ -11,13 +12,13 @@ const Home = () => {
     } catch (error) {
       setMessage("An error occurred");
     }
-  }
+  };
   return (
-    <div>
-        <h1>Welcome to document processing app</h1>
-        <button onClick={getData}>Get Data</button>
-    </div>
-  )
-}
+    <>
+      <NavigationBar></NavigationBar>
+      <h1>Welcome to document processing app</h1>
+    </>
+  );
+};
 
-export default Home
+export default Home;

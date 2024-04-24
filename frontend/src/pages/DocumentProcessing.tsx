@@ -16,8 +16,11 @@ const DocumentProcessing = () => {
   };
   return (
     <>
+      <div className="flex flex-wrap h-500">
       <FileDisplay fileUrl={`${backendUrlApi}/static/report.pdf`} side="left" />
       <FileDisplay fileUrl={`${backendUrlApi}/static/uploads/hello.pdf`} side="right" />
+      </div>
+
       <div>
         <Editor
           apiKey={apikey}
