@@ -1,11 +1,11 @@
 from datetime import datetime
+from typing import List
 from uuid import UUID
 
-from . import db
-
-from sqlalchemy.orm import Mapped, mapped_column, Relationship
 from sqlalchemy import ForeignKey
-from typing import List
+from sqlalchemy.orm import Mapped, Relationship, mapped_column
+
+from . import db
 
 
 class User(db.Model):
