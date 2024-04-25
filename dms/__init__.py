@@ -28,7 +28,7 @@ def create_app(test_config=None):
     db = SQLAlchemy(app)
 
     # Create the user model
-    from .models import User
+    from .models import User, Document
 
     # Create the database tables
     with app.app_context():
@@ -43,4 +43,7 @@ def create_app(test_config=None):
 
     from . import auth
     app.register_blueprint(auth.bp)
+
+    from . import document
+    app.register_blueprint(document.bp)
     return app
