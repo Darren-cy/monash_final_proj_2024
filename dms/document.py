@@ -1,12 +1,13 @@
 import os.path
 from datetime import datetime, timezone
+from http import HTTPStatus
 from mimetypes import guess_type
 from uuid import uuid4
 
 from flask import (Blueprint, abort, current_app, flash, g, redirect,
                    render_template, request, send_from_directory)
 from sqlalchemy import select
-from sqlalchemy.exc import IntegrityError, NoResultFound
+from sqlalchemy.exc import DataError, IntegrityError, NoResultFound
 from werkzeug.utils import secure_filename
 
 from .auth import login_required
@@ -61,5 +62,5 @@ def download_file(id):
         return send_from_directory(
             FILE_UPLOAD_PATH, str(document.id), mimetype=document.mime,
             download_name=document.name, last_modified=document.uploaded)
-    except NoResultFound:
-        abort(404)
+    except (NoResultFound, DataError):
+        abort(HTTPStatus.NOT_FOUND)
