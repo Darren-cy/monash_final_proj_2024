@@ -3,9 +3,10 @@ from datetime import datetime, timezone
 from mimetypes import guess_type
 from uuid import uuid4
 
-from flask import (Blueprint, current_app, flash, g, redirect, render_template,
-                   request)
-from sqlalchemy.exc import IntegrityError
+from flask import (Blueprint, abort, current_app, flash, g, redirect,
+                   render_template, request, send_from_directory)
+from sqlalchemy import select
+from sqlalchemy.exc import IntegrityError, NoResultFound
 from werkzeug.utils import secure_filename
 
 from .auth import login_required
@@ -51,6 +52,14 @@ def upload_file():
     return render_template("document/upload.html")
 
 
-@bp.route("/download", methods=['GET'])
-def download_file():
-    return "Downloaded file"
+@bp.route("/download/<id>", methods=['GET'])
+def download_file(id):
+    try:
+        session = current_app.db.session
+        query = select(Document).where(Document.id == id)
+        document = session.scalars(query).one()
+        return send_from_directory(
+            FILE_UPLOAD_PATH, str(document.id), mimetype=document.mime,
+            download_name=document.name, last_modified=document.uploaded)
+    except NoResultFound:
+        abort(404)
