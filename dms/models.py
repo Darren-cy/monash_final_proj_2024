@@ -34,6 +34,7 @@ class User(db.Model):
     password: Mapped[str] = mapped_column("user_password")
 
     documents: Mapped[List["Document"]] = Relationship(back_populates="owner")
+    assessments: Mapped["Assessment"] = Relationship(back_populates="owner")
 
     def __repr__(self):
         return f'<User {self.name} ({self.email})>'
