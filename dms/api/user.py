@@ -1,9 +1,12 @@
-from flask_restful import Resource  # type: ignore
+from http import HTTPStatus
+
 from flask import current_app
-from dms.models import User
+from flask_restful import Resource  # type: ignore
 from sqlalchemy import select
 from sqlalchemy.exc import NoResultFound
-from http import HTTPStatus
+
+from dms.models import User
+
 
 class UserResource(Resource):
     def get(self, id):
