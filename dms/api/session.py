@@ -7,9 +7,10 @@ from flask_restful.reqparse import RequestParser  # type: ignore
 from sqlalchemy import select
 from sqlalchemy.exc import NoResultFound
 from email_validator import EmailNotValidError, validate_email
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt
 
 from dms.models import User
+from dms import jwt_blocklist
 
 
 parser = RequestParser()
@@ -46,8 +47,11 @@ class SessionResource(Resource):
         access_token = create_access_token(identity=user.id)
         return jsonify(access_token=access_token)
 
+    @jwt_required()
     def delete(self):
-        pass
+        jti = get_jwt()
+        jwt_blocklist.set(jti, "", expire=900)
+        return {"message": "Logged out."}
 
     # def get(self, id):
     #     session = current_app.db.session

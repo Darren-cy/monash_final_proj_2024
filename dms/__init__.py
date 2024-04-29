@@ -4,9 +4,11 @@ from dotenv import load_dotenv
 from flask import Flask, current_app, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
+from diskcache import Cache  # type: ignore
 
 db: SQLAlchemy = SQLAlchemy()
 jwt: JWTManager = JWTManager()
+jwt_blocklist = Cache(r"d:\blocklist")
 
 
 def create_app(test_config=None):
@@ -57,3 +59,10 @@ def create_app(test_config=None):
     from . import api
     app.register_blueprint(api.bp)
     return app
+
+
+@jwt.token_in_blocklist_loader
+def check_if_token_is_revoked(jwt_header, jwt_payload: dict):
+    jti = jwt_payload["jti"]
+    token_in_blocklist = jwt_blocklist.get(jti)
+    return token_in_blocklist is not None
