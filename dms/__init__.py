@@ -3,6 +3,10 @@ import os
 from dotenv import load_dotenv
 from flask import Flask, current_app, render_template
 from flask_sqlalchemy import SQLAlchemy
+from flask_jwt_extended import JWTManager
+
+db: SQLAlchemy = SQLAlchemy()
+jwt: JWTManager = JWTManager()
 
 
 def create_app(test_config=None):
@@ -25,7 +29,7 @@ def create_app(test_config=None):
         pass
     global db
     # Initialize the database
-    db = SQLAlchemy(app)
+    db.init_app(app)
 
     # Create the user model
     from .models import User, Document
@@ -35,6 +39,9 @@ def create_app(test_config=None):
         db.create_all()
         db.session.commit()
         current_app.db = db
+
+    # Set up the JWT manager
+    jwt.init_app(app)
 
     # Register the index route
     @app.route('/')
