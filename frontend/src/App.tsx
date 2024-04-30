@@ -3,6 +3,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import AuthenticationPage from "./pages/AuthenticationPage"
 import Dashboard from "./pages/Dashboard";
 import DocumentProcessing from "./pages/DocumentProcessing";
 import Upload from "./pages/Upload";
@@ -19,8 +20,8 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<AuthenticationPage />} />
+        <Route path="/register" element={<AuthenticationPage />} />
         <Route
           path="/dashboard"
           element={
