@@ -10,4 +10,4 @@ api = Api(bp)
 
 api.add_resource(UserResource, "/user/<int:id>")
 api.add_resource(SessionResource, "/session")
-api.add_resource(DocumentResource, "/document", "/document/<int:id>")
+api.add_resource(DocumentResource, "/document", "/document/<string:id>")
