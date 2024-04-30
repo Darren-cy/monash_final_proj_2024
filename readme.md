@@ -54,6 +54,7 @@ Create the .env file which contains the following info:
 DATABASE_URL=postgresql://<username>:<password>@localhost:5432/<database_name>
 JWT_SECRET_KEY="YourSecretKey"
 VITE_API_URL="http://localhost:5000"
+VITE_BACKEND_API_URL="http://localhost:5000/api/v1.0"
 ```
 
 Create the .flaskenv file which contains the following info:
