@@ -8,9 +8,11 @@ The API is at `/api/v1.0/`.
 
 ### User
 
-| Action               | Method | Endpoint     | Response           |
-|----------------------|--------|--------------|--------------------|
-| Get a user's details | GET    | `/user/\<id\>` | [User object](#user-object) |
+| Action               | Method | Endpoint     | Response           | Notes |
+|----------------------|--------|--------------|--------------------|---|
+| Get a user's details | GET    | `/user/<id>` | [User object](#user-object) |
+| Create a user | POST | `/user` | HTTP/405 Method Not Allowed | Not implemented |
+| Update a user | PUT | `/user` | HTTP/405 Method Not Allowed | Not implemented |
 
 
 ### Session
@@ -42,7 +44,7 @@ When sending requests to protected API endpoints, send the `access_token` part o
 
 | Header | Value |
 |---|---|
-| `Authorization` | `Bearer \<authorization_token\>` |
+| `Authorization` | `Bearer <authorization_token>` |
 
 
 ### User object

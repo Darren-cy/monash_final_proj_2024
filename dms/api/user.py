@@ -18,3 +18,9 @@ class UserResource(Resource):
             return {"error": "User not found."}, HTTPStatus.NOT_FOUND
         else:
             return {"id": user.id, "name": user.name, "email": user.email}
+
+    def post(self):
+        return {"msg": "Not implemented"}, HTTPStatus.METHOD_NOT_ALLOWED
+
+    def put(self):
+        return {"msg": "Not implemented"}, HTTPStatus.METHOD_NOT_ALLOWED
