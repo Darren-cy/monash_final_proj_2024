@@ -35,12 +35,12 @@ def upload_file():
         uuid = uuid4()
         uploaded = datetime.now(tz=timezone.utc)
         print(g.user)
-        document = Document(id=uuid, name=filename,
+        document = Document(filename=str(uuid), name=filename,
                             uploaded=uploaded, mime=mime, owner=g.user)
         session = current_app.db.session
         try:
             session.add(document)
-            file.save(os.path.join(FILE_UPLOAD_PATH, str(uuid)))
+            file.save(os.path.join(FILE_UPLOAD_PATH, document.filename))
             session.commit()
         except (IntegrityError, FileExistsError, FileNotFoundError) as e:
             session.rollback()
