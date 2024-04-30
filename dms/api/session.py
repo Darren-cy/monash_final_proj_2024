@@ -49,7 +49,7 @@ class SessionResource(Resource):
 
     @jwt_required()
     def delete(self):
-        jti = get_jwt()
+        jti = get_jwt()['jti']
         jwt_blocklist.set(jti, "", expire=900)
         return {"message": "Logged out."}
 
