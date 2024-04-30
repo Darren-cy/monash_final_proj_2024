@@ -29,7 +29,7 @@ Install requirements:
 py -m pip install -r requirements.txt
 ```
 
-##Database setup
+## Database setup
 Install the latest Postgresql and run the following commands in the terminal:
 
 ```
