@@ -17,16 +17,23 @@ Then, activate the virtual environment:
 .venv\scripts\activate
 ```
 
+For mac users, replace the two above command with:
+```
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
 Install requirements:
 
 ```
 py -m pip install -r requirements.txt
 ```
 
+##Database setup
 Install the latest Postgresql and run the following commands in the terminal:
 
 ```
-psql -U posgres
+psql -U postgres
 ```
 
 Then input the password when installing postgresql and run these commands:
