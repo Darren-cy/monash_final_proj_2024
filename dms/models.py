@@ -1,6 +1,5 @@
 from datetime import datetime
 from typing import List, Optional
-from uuid import UUID
 
 from sqlalchemy import ForeignKey, Column
 from sqlalchemy.orm import Mapped, Relationship, mapped_column
@@ -45,10 +44,12 @@ class Document(db.Model):
     submission or the assessment itself."""
     __tablename__ = "document"
 
-    id: Mapped[UUID] = mapped_column("document_id", primary_key=True)
+    id: Mapped[int] = mapped_column("document_id", primary_key=True)
     name: Mapped[str] = mapped_column("document_name")
     mime: Mapped[str] = mapped_column("document_mime")
     uploaded: Mapped[datetime] = mapped_column("document_uploaded")
+    filename: Mapped[str] = mapped_column(
+        "document_filesystem_name", unique=True)
     owner_id: Mapped[int] = mapped_column(ForeignKey("user.user_id"))
 
     owner: Mapped[User] = Relationship(back_populates="documents")
@@ -80,7 +81,7 @@ class Assessment(db.Model):
     created: Mapped[datetime] = mapped_column("assessment_created")
     modified: Mapped[Optional[datetime]] = mapped_column("assessment_modified")
     owner_id: Mapped[int] = mapped_column(ForeignKey("user.user_id"))
-    rubric_id: Mapped[UUID] = mapped_column(ForeignKey("document.document_id"))
+    rubric_id: Mapped[int] = mapped_column(ForeignKey("document.document_id"))
 
     owner: Mapped["User"] = Relationship(back_populates="assessments")
     rubric: Mapped["Document"] = Relationship()
