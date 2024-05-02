@@ -29,10 +29,6 @@ postParser.add_argument(
     'file', location='files', type=werkzeug.datastructures.FileStorage,
     required=True)
 
-getParser = RequestParser()
-getParser.add_argument("action", location='args', choices=(
-    "stat", "download"), case_sensitive=False, default="stat")
-
 
 class DocumentResource(Resource):
     @marshal_with(document_fields)
@@ -46,18 +42,9 @@ class DocumentResource(Resource):
     def _get_document(self, id):
         return current_app.db.get_or_404(Document, id)
 
-    def _get_file(self, id):
-        document: Document = current_app.db.get_or_404(Document, id)
-        return send_from_directory(
-            FILE_UPLOAD_PATH, document.filename, mimetype=document.mime,
-            download_name=document.name, last_modified=document.uploaded)
-
-    def get(self, id=None, action=None):
-        action = getParser.parse_args()["action"]
+    def get(self, id=None):
         if id is None:
             return self._get_documents()
-        if action == "download":
-            return self._get_file(id)
         return self._get_document(id)
 
     @jwt_required()
@@ -83,3 +70,11 @@ class DocumentResource(Resource):
             abort(HTTPStatus.INTERNAL_SERVER_ERROR, str(e))
         else:
             return document
+
+
+class DocumentDownloadResource(Resource):
+    def get(self, id):
+        document: Document = current_app.db.get_or_404(Document, id)
+        return send_from_directory(
+            FILE_UPLOAD_PATH, document.filename, mimetype=document.mime,
+            download_name=document.name, last_modified=document.uploaded)
