@@ -6,7 +6,7 @@ from flask_restful.reqparse import RequestParser  # type: ignore
 from dms.models import Document
 from sqlalchemy import Select
 from sqlalchemy.exc import IntegrityError
-from flask import current_app, abort
+from flask import current_app, abort, send_from_directory
 import werkzeug.datastructures
 from mimetypes import guess_type
 from werkzeug.utils import secure_filename
@@ -22,10 +22,15 @@ document_fields = {
     "ctime": fields.DateTime(attribute="uploaded")
 }
 
-parser = RequestParser()
-parser.add_argument(
+postParser = RequestParser()
+postParser.add_argument(
     'file', location='files', type=werkzeug.datastructures.FileStorage,
     required=True)
+
+
+getParser = RequestParser()
+getParser.add_argument("action", location='args', choices=(
+    "stat", "download"), case_sensitive=False, default="stat")
 
 
 class DocumentResource(Resource):
@@ -40,18 +45,25 @@ class DocumentResource(Resource):
     def _get_document(self, id):
         return current_app.db.get_or_404(Document, id)
 
-    def get(self, id=None):
+    def _get_file(self, id):
+        document: Document = current_app.db.get_or_404(Document, id)
+        return send_from_directory(
+            FILE_UPLOAD_PATH, document.filename, mimetype=document.mime,
+            download_name=document.name, last_modified=document.uploaded)
+
+    def get(self, id=None, action=None):
+        action = getParser.parse_args()["action"]
         if id is None:
             return self._get_documents()
+        if action == "download":
+            return self._get_file(id)
         return self._get_document(id)
 
     @jwt_required()
     @marshal_with(document_fields)
     def post(self):
-        args = parser.parse_args()
+        args = postParser.parse_args()
         file = args['file']
-        print(file.mimetype)
-        print(guess_type(file.filename))
         mime = (file.mimetype or guess_type(file.filename)[0]
                 or "application/octet-stream")
         filename = secure_filename(file.filename)
