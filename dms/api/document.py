@@ -1,17 +1,19 @@
 import os.path
 from datetime import datetime, timezone
+from http import HTTPStatus
+from mimetypes import guess_type
 from uuid import uuid4
+
+import werkzeug.datastructures
+from flask import abort, current_app, send_from_directory
+from flask_jwt_extended import current_user, jwt_required
 from flask_restful import Resource, fields, marshal_with  # type: ignore
 from flask_restful.reqparse import RequestParser  # type: ignore
-from dms.models import Document
 from sqlalchemy import Select
 from sqlalchemy.exc import IntegrityError
-from flask import current_app, abort, send_from_directory
-import werkzeug.datastructures
-from mimetypes import guess_type
 from werkzeug.utils import secure_filename
-from http import HTTPStatus
-from flask_jwt_extended import jwt_required, current_user
+
+from dms.models import Document
 
 FILE_UPLOAD_PATH = r"d:\projects\fitproject\instance\uploads"
 
@@ -26,7 +28,6 @@ postParser = RequestParser()
 postParser.add_argument(
     'file', location='files', type=werkzeug.datastructures.FileStorage,
     required=True)
-
 
 getParser = RequestParser()
 getParser.add_argument("action", location='args', choices=(
