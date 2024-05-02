@@ -66,3 +66,15 @@ def check_if_token_is_revoked(jwt_header, jwt_payload: dict):
     jti = jwt_payload["jti"]
     token_in_blocklist = jwt_blocklist.get(jti)
     return token_in_blocklist is not None
+
+
+@jwt.user_identity_loader
+def user_to_id(user):
+    return user.id
+
+
+@jwt.user_lookup_loader
+def jwt_to_user(jwt_header, jwt_data):
+    from .models import User
+    id = jwt_data["sub"]
+    return User.query.filter_by(id=id).one_or_none()

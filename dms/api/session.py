@@ -44,7 +44,7 @@ class SessionResource(Resource):
         if not check_password_hash(user.password, password):
             abort_on_invalid_credentials()
 
-        access_token = create_access_token(identity=user.id)
+        access_token = create_access_token(identity=user)
         return jsonify(access_token=access_token)
 
     @jwt_required()
