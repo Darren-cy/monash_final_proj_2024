@@ -72,9 +72,13 @@ When sending requests to protected API endpoints, send the `access_token` part o
 
 [Document object]: #document-object
 
-| Field   | Type   | Explanation                   |
-|---------|--------|-------------------------------|
-| `id`    | Int    | Document's ID                 |
-| `name`  | String | Document's filename           |
-| `type`  | String | Document's mime type          |
-| `ctime` | String | Creation time of the document |
+| Field         | Type   | Explanation                                               |
+|---------------|--------|-----------------------------------------------------------|
+| `id`          | Int    | Document's ID                                             |
+| `name`        | String | Document's filename                                       |
+| `type`        | String | Document's mime type                                      |
+| `ctime`       | String | Creation time of the document                             |
+| `size`        | Int    | Filesize in bytes                                         |
+| `owner.id`    | Int    | File owner's ID                                           |
+| `owner.name`  | String | File owner's name                                         |
+| `downloadURL` | String | URL from which the contents of the file may be downloaded |
