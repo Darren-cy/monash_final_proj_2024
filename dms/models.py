@@ -50,6 +50,7 @@ class Document(db.Model):
     uploaded: Mapped[datetime] = mapped_column("document_uploaded")
     filename: Mapped[str] = mapped_column(
         "document_filesystem_name", unique=True)
+    filesize: Mapped[int] = mapped_column("document_filesystem_size")
     owner_id: Mapped[int] = mapped_column(ForeignKey("user.user_id"))
 
     owner: Mapped[User] = Relationship(back_populates="documents")
