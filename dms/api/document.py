@@ -21,7 +21,13 @@ document_fields = {
     'id': fields.Integer,
     'name': fields.String,
     'type': fields.String(attribute="mime"),
-    "ctime": fields.DateTime(attribute="uploaded")
+    'size': fields.Integer(attribute="filesize"),
+    "ctime": fields.DateTime(attribute="uploaded"),
+    "owner": fields.Nested({
+        "id": fields.Integer,
+        "name": fields.String,
+    }),
+    "downloadURL": fields.Url("api.documentdownloadresource"),
 }
 
 postParser = RequestParser()
@@ -64,6 +70,7 @@ class DocumentResource(Resource):
         try:
             session.add(document)
             file.save(os.path.join(FILE_UPLOAD_PATH, document.filename))
+            document.filesize = file.tell()
             session.commit()
         except (IntegrityError, FileExistsError, FileNotFoundError) as e:
             session.rollback()
