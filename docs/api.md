@@ -8,49 +8,73 @@ The API is at `/api/v1.0/`.
 
 ### User
 
-| Action               | Method | Endpoint     | Response           | Notes |
-|----------------------|--------|--------------|--------------------|---|
-| Get a user's details | GET    | `/user/<id>` | [User object](#user-object) |
-| Create a user | POST | `/user` | HTTP/405 Method Not Allowed | Not implemented |
-| Update a user | PUT | `/user` | HTTP/405 Method Not Allowed | Not implemented |
-
+| Action               | Method | Endpoint     | Response                    | Notes           |
+|----------------------|--------|--------------|-----------------------------|-----------------|
+| Get a user's details | GET    | `/user/<id>` | [User object]               |                 |
+| Create a user        | POST   | `/user`      | HTTP/405 Method Not Allowed | Not implemented |
+| Update a user        | PUT    | `/user`      | HTTP/405 Method Not Allowed | Not implemented |
 
 ### Session
 
-| Action | Method | Endpoint | Data | Response | Authorization |
-|---|---|---|---|---|---|
-| Log a user in | POST | `/session` | [Credentials object](#credentials-object) | [Token object](#token-object) | Not required |
-| Log a user out | DELETE | `/session` | | | Required |
+| Action         | Method | Endpoint   | Data                 | Response                      | Authorization |
+|----------------|--------|------------|----------------------|-------------------------------|---------------|
+| Log a user in  | POST   | `/session` | [Credentials object] | [Token object](#token-object) | Not required  |
+| Log a user out | DELETE | `/session` |                      |                               | Required      |
 
+### Documents
 
+| Action                  | Method | Endpoint                         | Data | Response          | Authorization |
+|-------------------------|--------|----------------------------------|------|-------------------|---------------|
+| Get a list of documents | GET    | `/document`                      |      | Document list     | Not required  |
+| Get a specific document | GET    | `/document/<id>` [^1]            |      | [Document object] | Not required  |
+| Download a document     | GET    | `/document/<id>?action=download` |      | File stream       | Not required  |
+| Upload a document       | POST   | `/document`                      | *    | [Document object] | Required      |
+
+[^1]: Implicit `action=stat`.
+
+* Multipart form with one file with name `file`.
 
 ## API Objects
 
 ### Credentials object
 
-| Field | Type | Optionality | Notes |
-|---|---|---|---
-| `email` | String | Required | User's registered email address |
-| `password` | String | Required | User's password |
+[Credentials object]: #credentials-object
 
+| Field      | Type   | Optionality | Notes                           |
+|------------|--------|-------------|---------------------------------|
+| `email`    | String | Required    | User's registered email address |
+| `password` | String | Required    | User's password                 |
 
 ### Token object
 
-| Field | Type | Optionality | Explanation |
-|---|---|---|---|
-| `access_token` | String | Required | JSON web token that can be used to authorize the user. |
+| Field          | Type   | Optionality | Explanation                                            |
+|----------------|--------|-------------|--------------------------------------------------------|
+| `access_token` | String | Required    | JSON web token that can be used to authorize the user. |
 
 When sending requests to protected API endpoints, send the `access_token` part of this object in the `Authorization` header.
 
-| Header | Value |
-|---|---|
+| Header          | Value                          |
+|-----------------|--------------------------------|
 | `Authorization` | `Bearer <authorization_token>` |
 
 
 ### User object
 
-| Field  | Type   | Explanation  |
-|-------|--------|--------------|
-| `id`    | int    | User ID      |
+[User object]: #user-object
+
+| Field   | Type   | Explanation  |
+|---------|--------|--------------|
+| `id`    | Int    | User ID      |
 | `name`  | String | User's name  |
 | `email` | string | User's email |
+
+### Document object
+
+[Document object]: #document-object
+
+| Field   | Type   | Explanation                   |
+|---------|--------|-------------------------------|
+| `id`    | Int    | Document's ID                 |
+| `name`  | String | Document's filename           |
+| `type`  | String | Document's mime type          |
+| `ctime` | String | Creation time of the document |
