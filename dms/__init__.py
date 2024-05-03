@@ -4,10 +4,12 @@ from dotenv import load_dotenv
 from flask import Flask, current_app, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
+from flask_marshmallow import Marshmallow
 from diskcache import Cache  # type: ignore
 
 db: SQLAlchemy = SQLAlchemy()
 jwt: JWTManager = JWTManager()
+ma: Marshmallow = Marshmallow()
 jwt_blocklist = Cache(r"d:\blocklist")
 
 
@@ -32,7 +34,7 @@ def create_app(test_config=None):
     global db
     # Initialize the database
     db.init_app(app)
-
+    ma.init_app(app)
     # Create the user model
     from .models import User, Document
 
