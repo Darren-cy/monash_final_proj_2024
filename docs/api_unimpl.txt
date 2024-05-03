@@ -1,7 +1,4 @@
 Authors
-GET /person		# List authors
-GET /person/<id>	# Get an author
-POST /person	# Create an author
 PUT /person		# Update an author
 DELETE /person	# Delete an author
 

@@ -34,6 +34,15 @@ The API is at `/api/v1.0/`.
 
 * Multipart form with one file with name `file`.
 
+### Authors
+
+| Action                | Method | Endpoint       | Data            | Response        |
+|-----------------------|--------|----------------|-----------------|-----------------|
+| Get a list of authors | GET    | `/person`      |                 | [Person object] |
+| Get a specific author | GET    | `/person/<id>` |                 | [Person object] |
+| Create an author      | POST   | `/person`      | [Person object] | [Person object] |
+
+
 ## API Objects
 
 ### Credentials object
@@ -82,3 +91,14 @@ When sending requests to protected API endpoints, send the `access_token` part o
 | `owner.id`    | Int    | File owner's ID                                           |
 | `owner.name`  | String | File owner's name                                         |
 | `downloadURL` | String | URL from which the contents of the file may be downloaded |
+
+
+### Person object
+
+[Person object]: #person-object
+
+| Field | Type   | Explanation                |
+|-------|--------|----------------------------|
+| id    | Int    | Person object's ID         |
+| name  | String | Person's name              |
+| uri   | String | URI to retrieve the Person |
