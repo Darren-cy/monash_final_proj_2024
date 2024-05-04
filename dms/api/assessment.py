@@ -38,6 +38,8 @@ class AssessmentSchema(Schema):
     rubric_id = fields.Integer(data_key="rubric", load_only=True)
     criteria = fields.List(fields.Nested(CriterionSchema), required=True)
     owner = fields.Nested(UserSchema)
+    minMarks = fields.Int(dump_only=True)
+    maxMarks = fields.Int(dump_only=True)
 
 
 class AssessmentResource(Resource):

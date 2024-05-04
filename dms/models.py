@@ -3,6 +3,7 @@ from typing import List, Optional
 
 from sqlalchemy import ForeignKey, Column
 from sqlalchemy.orm import Mapped, Relationship, mapped_column
+from sqlalchemy.ext.hybrid import hybrid_property
 
 from . import db
 
@@ -70,6 +71,19 @@ class Author(db.Model):
         secondary=submission_author, back_populates="authors")
 
 
+class Criterion(db.Model):
+    __tablename__ = "criterion"
+
+    id: Mapped["int"] = mapped_column("criterion_id", primary_key=True)
+    name: Mapped[str] = mapped_column("criterion_name")
+    min: Mapped[int] = mapped_column("criterion_min")
+    max: Mapped[int] = mapped_column("criterion_max")
+    assessment_id: Mapped[int] = mapped_column(
+        ForeignKey("assessment.assessment_id"))
+
+    assessment: Mapped["Assessment"] = Relationship(back_populates="criteria")
+
+
 class Assessment(db.Model):
     """An assessment task.
     NB. This is the task itself, not a submission, which is the deliverable for
@@ -91,18 +105,29 @@ class Assessment(db.Model):
     submissions: Mapped[List["Submission"]] = Relationship(
         back_populates="assessment")
 
+    @hybrid_property
+    def maxMarks(self) -> int:
+        return sum([criterion.max for criterion in self.criteria])
+    
+    @hybrid_property
+    def minMarks(self) -> int:
+        return sum([criterion.min for criterion in self.criteria])
 
-class Criterion(db.Model):
-    __tablename__ = "criterion"
 
-    id: Mapped["int"] = mapped_column("criterion_id", primary_key=True)
-    name: Mapped[str] = mapped_column("criterion_name")
-    min: Mapped[int] = mapped_column("criterion_min")
-    max: Mapped[int] = mapped_column("criterion_max")
-    assessment_id: Mapped[int] = mapped_column(
-        ForeignKey("assessment.assessment_id"))
+class Result(db.Model):
+    __tablename__ = "result"
 
-    assessment: Mapped["Assessment"] = Relationship(back_populates="criteria")
+    submission_id: Mapped[int] = mapped_column(
+        ForeignKey("submission.submission_id"), primary_key=True)
+    criterion_id: Mapped[int] = mapped_column(
+        ForeignKey("criterion.criterion_id"), primary_key=True)
+    value: Mapped[int] = mapped_column("result_value")
+    marker_id: Mapped[int] = mapped_column(ForeignKey("user.user_id"))
+    marked: Mapped[datetime] = mapped_column("result_marked")
+
+    submission: Mapped["Submission"] = Relationship(back_populates="results")
+    criterion: Mapped["Criterion"] = Relationship()
+    marker: Mapped["User"] = Relationship()
 
 
 class Submission(db.Model):
@@ -121,19 +146,8 @@ class Submission(db.Model):
         secondary=submission_author, back_populates="submissions")
     attachments: Mapped[List["Document"]] = Relationship(
         secondary=submission_attachment)
+    results: Mapped[list[Result]] = Relationship(back_populates="submission")
 
-
-class Result(db.Model):
-    __tablename__ = "result"
-
-    submission_id: Mapped[int] = mapped_column(
-        ForeignKey("submission.submission_id"), primary_key=True)
-    criterion_id: Mapped[int] = mapped_column(
-        ForeignKey("criterion.criterion_id"), primary_key=True)
-    value: Mapped[int] = mapped_column("result_value")
-    marker_id: Mapped[int] = mapped_column(ForeignKey("user.user_id"))
-    marked: Mapped[datetime] = mapped_column("result_marked")
-
-    submission: Mapped["Submission"] = Relationship()
-    criterion: Mapped["Criterion"] = Relationship()
-    marker: Mapped["User"] = Relationship()
+    @hybrid_property
+    def totalMarks(self) -> int:
+        return sum([result.value for result in self.results])
