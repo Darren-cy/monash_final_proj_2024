@@ -11,8 +11,7 @@ The API is at `/api/v1.0/`.
 | Action               | Method | Endpoint     | Response                    | Notes           |
 |----------------------|--------|--------------|-----------------------------|-----------------|
 | Get a user's details | GET    | `/user/<id>` | [User object]               |                 |
-| Create a user        | POST   | `/user`      | HTTP/405 Method Not Allowed | Not implemented |
-| Update a user        | PUT    | `/user`      | HTTP/405 Method Not Allowed | Not implemented |
+
 
 ### Session
 

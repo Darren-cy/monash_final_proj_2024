@@ -1,19 +1,19 @@
+user
+POST /user/<id> # Create a user
+PUT /user/<id> # Update a user
+DELETE /user/<id> # Delete a user
+
 Authors
 PUT /person		# Update an author
 DELETE /person	# Delete an author
 
 Assessments
-GET /assessment	# List
-GET /assessment/<id>	# Get an assessment
-POST /assessment	# Create an assessment
 PUT /assessment	# Update
 DELETE /assessment	# Delete
 
 Submission
-GET /submission	# Get all submissions
-GET /assessment/<id>/submission	# List submissions for assessment
-POST /assessment/<id>/submission	# Create submission for assessment
-GET /submission/<id>	# Get submission
+PUT/submission/<id>	# Update submission
+DELETE/submission/<id>	# Delete submission
 
 Results
 GET /submission/<id>/mark	# Get results for submission
