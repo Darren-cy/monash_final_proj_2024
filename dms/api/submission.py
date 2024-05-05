@@ -22,7 +22,8 @@ class ResultSchema(Schema):
     value = fields.Integer()
     marker = fields.Nested(UserSchema, dump_only=True)
     marked = fields.DateTime(dump_only=True)
-    criterion = fields.Nested(CriterionSchema(only=["name", "min", "max"]))
+    criterion = fields.Nested(CriterionSchema(), dump_only=True)
+    criterion_id = fields.Integer(load_only=True, data_key="criterion")
 
 
 class SubmissionSchema(Schema):
