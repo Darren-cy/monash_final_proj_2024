@@ -6,7 +6,7 @@ from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, s
     unset_jwt_cookies, jwt_required
 from flask_cors import CORS
 
-bp = Blueprint('api', __name__, url_prefix='/api/v1.0')
+bp = Blueprint('user_api', __name__, url_prefix='/api/v1.0')
 CORS(bp, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
 @bp.route('/register', methods=['POST'])
