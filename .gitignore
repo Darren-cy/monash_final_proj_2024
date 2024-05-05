@@ -282,7 +282,7 @@ $RECYCLE.BIN/
 node_modules/
 
 #Flask migrate
-.migrations
+.migrations/*
 
 # PDF
 *.pdf
