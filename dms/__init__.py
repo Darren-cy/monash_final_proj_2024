@@ -43,8 +43,10 @@ def index():
 from dms import auth
 from dms.api import user_api
 from dms.api import display_upload_api
+from dms import api
 app.register_blueprint(auth.bp)
 app.register_blueprint(user_api.bp)
 app.register_blueprint(display_upload_api.bp)
+app.register_blueprint(api.bp)
 
 
