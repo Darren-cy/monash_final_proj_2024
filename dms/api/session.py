@@ -11,6 +11,7 @@ from flask_jwt_extended import create_access_token, jwt_required, get_jwt
 
 from dms.models import User
 from dms import jwt_blocklist
+from dms import db
 
 
 parser = RequestParser()
@@ -35,7 +36,7 @@ class SessionResource(Resource):
             abort_on_invalid_credentials()
 
         statement = select(User).where(User.email == email)
-        dbsession = current_app.db.session
+        dbsession = db.session
         try:
             user = dbsession.scalars(statement).one()
         except NoResultFound:
@@ -54,7 +55,7 @@ class SessionResource(Resource):
         return {"message": "Logged out."}
 
     # def get(self, id):
-    #     session = current_app.db.session
+    #     session = db.session
     #     query = select(User).where(User.id == id)
     #     try:
     #         user = session.scalars(query).one()
