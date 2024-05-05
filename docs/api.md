@@ -41,6 +41,22 @@ The API is at `/api/v1.0/`.
 | Create an author      | POST   | `/person`      | [Person object] | [Person object] |
 
 
+### Assessments
+| Action                    | Method | Endpoint           | Data | Response | Authorization |
+|---------------------------|--------|--------------------|------|----------|---------------|
+| Get a list of assessments | GET    | `/assessment`      |      |          | Not required  |
+| Get a specific assessment | GET    | `/assessment/<id>` |      |          | Not required  |
+| Create an assessment      | POST   | `/assessment`      |      |          | Required      |
+
+
+### Submissions
+
+| Action                                      | Method | Endpoint                      | Data | Response |
+|---------------------------------------------|--------|-------------------------------|------|----------|
+| Get a list of all submissions               | GET    | `/submission`                 |      |          |
+| Get a specific submission                   | GET    | `/submission/<id>`            |      |          |
+| Get a list of submissions for an assessment | GET    | `/assessment/<id>/submission` |      |          |
+| Create a submission                         | POST   | `/assessment/<id>/submission` |      |          |
 
 
 ## API Objects
