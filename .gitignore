@@ -282,9 +282,11 @@ $RECYCLE.BIN/
 node_modules/
 
 #Flask migrate
-migrations/
+.migrations
 
 # PDF
 *.pdf
+*.mp3
+*.mp4
 
 # End of https://www.toptal.com/developers/gitignore/api/python,venv,visualstudiocode,windows,macos,linux
