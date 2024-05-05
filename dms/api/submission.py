@@ -19,7 +19,7 @@ class AuthorSchema(Schema):
 
 
 class ResultSchema(Schema):
-    value = fields.Integer()
+    value = fields.Integer(required=True)
     marker = fields.Nested(UserSchema, dump_only=True)
     marked = fields.DateTime(dump_only=True)
     criterion = fields.Nested(CriterionSchema(), dump_only=True)
