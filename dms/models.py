@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import List, Optional
 
 from sqlalchemy import ForeignKey, Column
-from sqlalchemy.orm import Mapped, Relationship, mapped_column
+from sqlalchemy.orm import Mapped, Relationship, mapped_column, validates, object_session
 from sqlalchemy.ext.hybrid import hybrid_property
 
 from . import db
@@ -83,6 +83,20 @@ class Criterion(db.Model):
 
     assessment: Mapped["Assessment"] = Relationship(back_populates="criteria")
 
+    @validates("min", "max")
+    def validate_range(self, key, value):
+        if key == "min" and isinstance(self.max, int):
+            if value >= self.max:
+                raise ValueError(
+                    "A criterion's min must be less than its max. "
+                    f"Got min={value}, max={self.max}")
+        if key == "max" and isinstance(self.min, int):
+            if value <= self.min:
+                raise ValueError(
+                    "A criterion's max must be greater than its min. "
+                    f"Got min={self.min}, max={value}")
+        return value
+
 
 class Assessment(db.Model):
     """An assessment task.
@@ -108,7 +122,7 @@ class Assessment(db.Model):
     @hybrid_property
     def maxMarks(self) -> int:
         return sum([criterion.max for criterion in self.criteria])
-    
+
     @hybrid_property
     def minMarks(self) -> int:
         return sum([criterion.min for criterion in self.criteria])

@@ -63,9 +63,13 @@ class AssessmentResource(Resource):
         args = assessmentParser.load(request.get_json())
         name = args["name"]
         rubric_id = args["rubric_id"]
-        criteria = map(lambda criterion: Criterion(
-            **criterion), args["criteria"])
-        print(current_user)
+        criteria = []
+        for criterion in args["criteria"]:
+            try:
+                criteria.append(Criterion(**criterion))
+            except ValueError as e:
+                abort(HTTPStatus.UNPROCESSABLE_ENTITY,
+                      {criterion["name"], str(e)})
         assessment = Assessment(
             name=name, rubric_id=rubric_id, created=datetime.now(),
             criteria=list(criteria), owner_id=current_user.id)
