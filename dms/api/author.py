@@ -12,7 +12,6 @@ from dms.models import Author
 author_fields = {
     "id": fields.Integer,
     "name": fields.String,
-    "uri": fields.Url,
 }
 
 authorParser = RequestParser()
