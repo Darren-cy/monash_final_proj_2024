@@ -17,10 +17,10 @@ api.add_resource(UserResource, "/user/<int:id>")
 api.add_resource(SessionResource, "/session")
 api.add_resource(DocumentResource, "/document", "/document/<int:id>")
 api.add_resource(DocumentDownloadResource, "/document/<int:id>/download")
-
 api.add_resource(AuthorResource, "/person", "/person/<int:id>")
 api.add_resource(AssessmentResource, "/assessment", "/assessment/<int:id>")
 api.add_resource(SubmissionResource, "/submission", "/submission/<int:id>")
 api.add_resource(AssessmentSubmissionResource,
                  "/assessment/<int:id>/submission")
+
 api.add_resource(SubmissionResultResource, "/submission/<int:id>/mark")
