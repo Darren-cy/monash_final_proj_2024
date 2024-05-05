@@ -16,8 +16,6 @@ PUT/submission/<id>	# Update submission
 DELETE/submission/<id>	# Delete submission
 
 Results
-GET /submission/<id>/mark	# Get results for submission
-POST /submission/<id>/mark	# Add marks for submission
 
 Person {
 	"id": Int
