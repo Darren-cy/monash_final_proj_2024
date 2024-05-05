@@ -23,14 +23,12 @@ The API is at `/api/v1.0/`.
 
 ### Documents
 
-| Action                  | Method | Endpoint                         | Data | Response          | Authorization |
-|-------------------------|--------|----------------------------------|------|-------------------|---------------|
-| Get a list of documents | GET    | `/document`                      |      | Document list     | Not required  |
-| Get a specific document | GET    | `/document/<id>` [^1]            |      | [Document object] | Not required  |
-| Download a document     | GET    | `/document/<id>?action=download` |      | File stream       | Not required  |
-| Upload a document       | POST   | `/document`                      | *    | [Document object] | Required      |
-
-[^1]: Implicit `action=stat`.
+| Action                  | Method | Endpoint                  | Data | Response          | Authorization |
+|-------------------------|--------|---------------------------|------|-------------------|---------------|
+| Get a list of documents | GET    | `/document`               |      | Document list     | Not required  |
+| Get a specific document | GET    | `/document/<id>`          |      | [Document object] | Not required  |
+| Download a document     | GET    | `/document/<id>/download` |      | File stream       | Not required  |
+| Upload a document       | POST   | `/document`               | *    | [Document object] | Required      |
 
 * Multipart form with one file with name `file`.
 
@@ -41,6 +39,8 @@ The API is at `/api/v1.0/`.
 | Get a list of authors | GET    | `/person`      |                 | [Person object] |
 | Get a specific author | GET    | `/person/<id>` |                 | [Person object] |
 | Create an author      | POST   | `/person`      | [Person object] | [Person object] |
+
+
 
 
 ## API Objects
