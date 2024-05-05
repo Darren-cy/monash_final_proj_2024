@@ -8,9 +8,9 @@ The API is at `/api/v1.0/`.
 
 ### User
 
-| Action               | Method | Endpoint     | Response                    | Notes           |
-|----------------------|--------|--------------|-----------------------------|-----------------|
-| Get a user's details | GET    | `/user/<id>` | [User object]               |                 |
+| Action               | Method | Endpoint     | Data | Response      | Authorization |
+|----------------------|--------|--------------|------|---------------|---------------|
+| Get a user's details | GET    | `/user/<id>` |      | [User object] | Not required  |
 
 
 ### Session
