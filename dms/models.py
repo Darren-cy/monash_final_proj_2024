@@ -112,6 +112,7 @@ class Submission(db.Model):
     id: Mapped[int] = mapped_column("submission_id", primary_key=True)
     submitted: Mapped[datetime] = mapped_column("submission_submitted")
     modified: Mapped[Optional[datetime]] = mapped_column("submission_modified")
+    feedback: Mapped[Optional[str]] = mapped_column("submission_feedback")
     assessment_id: Mapped[int] = mapped_column(
         ForeignKey("assessment.assessment_id"))
 
@@ -131,6 +132,7 @@ class Result(db.Model):
     criterion_id: Mapped[int] = mapped_column(
         ForeignKey("criterion.criterion_id"), primary_key=True)
     value: Mapped[int] = mapped_column("result_value")
+    comment: Mapped[Optional[str]] = mapped_column("result_comment")
     marker_id: Mapped[int] = mapped_column(ForeignKey("user.user_id"))
     marked: Mapped[datetime] = mapped_column("result_marked")
 
