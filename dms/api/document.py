@@ -15,8 +15,10 @@ from werkzeug.utils import secure_filename
 
 from dms.models import Document
 from dms import db
+import os 
 
-FILE_UPLOAD_PATH = r"d:\projects\fitproject\instance\uploads"
+# FILE_UPLOAD_PATH = r"d:\projects\fitproject\instance\uploads"
+FILE_UPLOAD_PATH = os.path.join(os.path.dirname(__file__), "uploads")
 
 document_fields = {
     'id': fields.Integer,
