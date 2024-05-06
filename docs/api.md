@@ -63,10 +63,10 @@ The API is at `/api/v1.0/`.
 
 ### Results
 
-| Action                       | Method | Endpoint                | Data                        | Return                    | Authentication |
-|------------------------------|--------|-------------------------|-----------------------------|---------------------------|----------------|
-| Get results for a submission | GET    | `/submission/<id>/mark` |                             | List[[ResultRead object]] | Not required   |
-| Add results for a submission | POST   | `/submission/<id>/mark` | List[[ResultCreate object]] | List[[ResultRead object]] | Required       |
+| Action                       | Method | Endpoint                | Data                       | Return                   | Authentication |
+|------------------------------|--------|-------------------------|----------------------------|--------------------------|----------------|
+| Get results for a submission | GET    | `/submission/<id>/mark` |                            | List[[MarksRead object]] | Not required   |
+| Add results for a submission | POST   | `/submission/<id>/mark` | List[[MarksCreate object]] | List[[MarksRead object]] | Required       |
 
 
 ## API Objects
@@ -188,10 +188,11 @@ When sending requests to protected API endpoints, send the `access_token` part o
 
 [ResultCreate object]: #resultcreate-object
 
-| Field     | Type    | Explanation                                        |
-|-----------|---------|----------------------------------------------------|
-| value     | Integer | Number of marks allocated for this criterion       |
-| criterion | Integer | ID for the criterion to which this result pertains |
+| Field     | Type         | Explanation                                        |
+|-----------|--------------|----------------------------------------------------|
+| value     | Integer      | Number of marks allocated for this criterion       |
+| criterion | Integer      | ID for the criterion to which this result pertains |
+| comment   | String\|null | Comment for this result                            |
 
 
 ### ResultRead object
@@ -205,6 +206,7 @@ When sending requests to protected API endpoints, send the `access_token` part o
 | marker.id   | Integer                | ID of the user who gave the mark for this criterion  |
 | marker.name | String                 | Name of the marker who gave the mark for this result |
 | marked      | String                 | Date and time at which this mark was given           |
+| comment     | String\|null           | Comment for this result                              |
 
 
 ### SubmissionCreate object
@@ -230,3 +232,27 @@ When sending requests to protected API endpoints, send the `access_token` part o
 | attachments | List[[Document object]]   | Documents attached to this submission                                                        |
 | authors     | List[[Person object]]     | List of authors of this assessment                                                           |
 | results     | List[[ResultRead object]] | Break down of marks awarded for this submission (only includes the criterion and value)      |
+
+
+### MarksCreate object
+
+[MarksCreate object]: #markscreate-object
+
+| Field    | Type                        | Explanation                                |
+|----------|-----------------------------|--------------------------------------------|
+| results  | List[[ResultCreate object]] | The individual results for this submission |
+| feedback | String\|null                | Feedback comment on this submission.       |
+
+
+### MarksRead object
+
+[MarksRead object]: #marksread-object
+
+| Field               | Type                      | Explanation                                |
+|---------------------|---------------------------|--------------------------------------------|
+| assessment.id       | Integer                   | Assessment's ID                            |
+| assessment.name     | String                    | Name of the assessment                     |
+| assessment.minMarks | Integer                   | Minimum marks earnable on this assessment  |
+| assessment.maxMarks | Integer                   | Maximum marks earnable on this assessment  |
+| results             | List[[ResultRead object]] | The individual results for this submission |
+| feedback            | String\|null              | Feedback comment on this submission.       |
