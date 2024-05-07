@@ -147,18 +147,19 @@ When sending requests to protected API endpoints, send the `access_token` part o
 
 [AssessmentRead object]: #assessmentread-object
 
-| Field       | Type                         | Explanation                                    |
-|-------------|------------------------------|------------------------------------------------|
-| id          | Integer                      | Assessment's ID                                |
-| name        | String                       | Assessment's name                              |
-| ctime       | String                       | Creation time of the assessment                |
-| rubric.id   | Integer                      | ID of the assessment's rubric                  |
-| rubric.name | String                       | Filename of the assessment's rubric            |
-| owner.id    | Integer                      | ID of the assessment owner in the database     |
-| owner.name  | String                       | Assessment owner's name                        |
-| minMarks    | Integer                      | Minimum marks earnable on this assessment      |
-| maxMarks    | Integer                      | Maximum marks earnable on this assessment      |
-| criteria    | List[[CriterionRead object]] | List of criteria that apply to this assessment |
+| Field       | Type                          | Explanation                                    |
+|-------------|-------------------------------|------------------------------------------------|
+| id          | Integer                       | Assessment's ID                                |
+| name        | String                        | Assessment's name                              |
+| ctime       | String                        | Creation time of the assessment                |
+| rubric.id   | Integer                       | ID of the assessment's rubric                  |
+| rubric.name | String                        | Filename of the assessment's rubric            |
+| owner.id    | Integer                       | ID of the assessment owner in the database     |
+| owner.name  | String                        | Assessment owner's name                        |
+| minMarks    | Integer                       | Minimum marks earnable on this assessment      |
+| maxMarks    | Integer                       | Maximum marks earnable on this assessment      |
+| criteria    | List[[CriterionRead object]]  | List of criteria that apply to this assessment |
+| submissions | List[[SubmissionRead object]] | Submissions (excluding assessment object)      |
 
 
 ### CriterionCreate object
