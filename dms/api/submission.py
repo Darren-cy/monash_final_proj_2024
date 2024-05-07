@@ -3,46 +3,12 @@ from http import HTTPStatus
 
 from flask import abort, request
 from flask_restful import Resource  # type: ignore
-from marshmallow import Schema, fields
 from sqlalchemy import select
 
 from dms import db
 from dms.models import Assessment, Author, Document, Submission
 
-from .assessment import (AssessmentSchema, CriterionSchema, DocumentSchema,
-                         UserSchema)
-
-
-class AuthorSchema(Schema):
-    id = fields.Integer(dump_only=True)
-    name = fields.String()
-
-
-class ResultSchema(Schema):
-    value = fields.Integer(required=True)
-    marker = fields.Nested(UserSchema, dump_only=True)
-    marked = fields.DateTime(dump_only=True)
-    criterion = fields.Nested(CriterionSchema(), dump_only=True)
-    criterion_id = fields.Integer(load_only=True, data_key="criterion")
-    comment = fields.String(load_default=None)
-
-
-class SubmissionSchema(Schema):
-    id = fields.Integer(dump_only=True)
-    ctime = fields.DateTime(dump_only=True, attribute="submitted")
-    # assessment_id = fields.Integer(load_only=True, data_key="assessment")
-    assessment = fields.Nested(AssessmentSchema(
-        only=["id", "name", "minMarks", "maxMarks"]), dump_only=True)
-    totalMarks = fields.Integer(dump_only=True)
-    attachments = fields.Nested(DocumentSchema(many=True), dump_only=True)
-    attachment_ids = fields.List(
-        fields.Integer(), load_only=True, data_key="attachments")
-    authors = fields.Nested(AuthorSchema(many=True), dump_only=True)
-    author_ids = fields.List(
-        fields.Integer(), load_only=True, data_key="authors")
-    results = fields.Nested(
-        ResultSchema(many=True, only=["criterion", "value"]), dump_only=True)
-    feedback = fields.String()
+from .schemas import SubmissionSchema
 
 
 submission_schema = SubmissionSchema()
