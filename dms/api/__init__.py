@@ -1,5 +1,6 @@
 from flask import Blueprint
 from flask_restful import Api  # type: ignore
+from flask_cors import CORS
 
 
 from .user import UserResource
@@ -10,7 +11,8 @@ from .submission import SubmissionResource, AssessmentSubmissionResource
 from .result import SubmissionResultResource
 
 
-bp = Blueprint('api', __name__, url_prefix='/api/v1.0')
+bp = Blueprint('api', __name__, url_prefix='/api/v1.0') 
+CORS(bp, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 api = Api(bp)
 
 api.add_resource(UserResource, "/user/<int:id>")
