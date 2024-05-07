@@ -13,12 +13,14 @@ from sqlalchemy import Select
 from sqlalchemy.exc import IntegrityError
 from werkzeug.utils import secure_filename
 
-from dms.models import Document
+from dms.models import Document, User
 from dms import db
 import os 
+from flask_cors import CORS
 
 # FILE_UPLOAD_PATH = r"d:\projects\fitproject\instance\uploads"
 FILE_UPLOAD_PATH = os.path.join(os.path.dirname(__file__), "uploads")
+CORS(resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
 document_fields = {
     'id': fields.Integer,
@@ -72,14 +74,14 @@ class DocumentResource(Resource):
         session = db.session
         try:
             session.add(document)
+            os.makedirs(FILE_UPLOAD_PATH, exist_ok=True)
             file.save(os.path.join(FILE_UPLOAD_PATH, document.filename))
             document.filesize = file.tell()
             session.commit()
         except (IntegrityError, FileExistsError, FileNotFoundError) as e:
             session.rollback()
             abort(HTTPStatus.INTERNAL_SERVER_ERROR, str(e))
-        else:
-            return document
+        return document, HTTPStatus.CREATED
 
 
 class DocumentDownloadResource(Resource):
