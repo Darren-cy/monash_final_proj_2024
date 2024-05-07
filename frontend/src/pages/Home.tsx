@@ -24,10 +24,7 @@ const Home = () => {
           <p className="text-gray-700 text-lg mt-4 leading-10">A streamline Document processing app for multiple purpose</p>
           <div className="space-x-4"> 
             <Link to="/dashboard" className="mt-8 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-              Student Assessment
-            </Link>
-            <Link to="/dashboard" className="mt-8 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-              Medical Assessment
+              Go to assessment
             </Link>
           </div>  
         </section>
