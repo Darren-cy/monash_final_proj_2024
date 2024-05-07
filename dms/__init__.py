@@ -44,9 +44,20 @@ from dms import auth
 from dms.api import user_api
 from dms.api import display_upload_api
 from dms import api
+app.register_blueprint(api.bp)
 app.register_blueprint(auth.bp)
 app.register_blueprint(user_api.bp)
 app.register_blueprint(display_upload_api.bp)
-app.register_blueprint(api.bp)
 
 
+
+@jwt.user_identity_loader
+def user_to_id(user):
+    return user.id
+
+
+@jwt.user_lookup_loader
+def jwt_to_user(jwt_header, jwt_data):
+    from .models import User
+    id = jwt_data["sub"]
+    return User.query.filter_by(id=id).one_or_none()

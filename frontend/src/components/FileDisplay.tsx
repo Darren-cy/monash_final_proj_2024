@@ -51,14 +51,16 @@ const FileDisplay = ({ fileUrl, side }: Props) => {
       {file ? (
         <div>
           {fileType.includes("video") ? (
-            <video controls src={fileUrl} />
+            <div className="w-full h-full overflow-auto resize self-center" >
+              <video controls src={fileUrl} width="50%" height="auto"/>
+            </div>
           ) : fileType.includes("image") ? (
             <img src={fileUrl} />
           ) : fileType.includes("audio") ? (
             <audio controls src={fileUrl} />
           ) : fileType.includes("pdf") ? (
-            <div className="w-full overflow-auto resize">
-              <iframe src={fileUrl} height="100%" width="100%" />
+            <div className="w-full h-full overflow-auto resize" >
+              <iframe src={fileUrl} width="100%"  height="70%" />
             </div>
           ) : (
             <div>
@@ -70,7 +72,7 @@ const FileDisplay = ({ fileUrl, side }: Props) => {
         </div>
       ) : (
         <div>
-          <div className="card">
+          <div className="card h-full justify-center flex items-center">
             <FileUpload
               name="file"
               url={`${backendUrl}/api/v1.0/upload`}
@@ -78,7 +80,10 @@ const FileDisplay = ({ fileUrl, side }: Props) => {
               accept="image/*,application/pdf,text/*,video/*,audio/*"
               maxFileSize={1024 * 1024 * 10} // 10MB
               emptyTemplate={
+                <div>
+                <p className="m-0">No file selected.</p>
                 <p className="m-0">Drag and drop files to here to upload.</p>
+                </div>
               }
             />
           </div>

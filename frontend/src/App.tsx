@@ -1,14 +1,12 @@
 import { Routes, Route, Navigate, BrowserRouter } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
 import NotFound from "./pages/NotFound";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
 import AuthenticationPage from "./pages/AuthenticationPage"
 import Dashboard from "./pages/Dashboard";
 import DocumentProcessing from "./pages/DocumentProcessing";
-import Upload from "./pages/Upload";
 import Profile from "./pages/Profile";
 import Home from "./pages/Home";
+import CreateAssessment from "./pages/CreateAssessment";
 
 function Logout() {
   localStorage.clear();
@@ -39,10 +37,10 @@ function App() {
           }
         />
         <Route
-          path="/upload"
+          path="/create-assessment"
           element={
             <ProtectedRoute>
-              <Upload />
+              <CreateAssessment />
             </ProtectedRoute>
           }
         />
