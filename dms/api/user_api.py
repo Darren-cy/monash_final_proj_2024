@@ -36,7 +36,8 @@ def register():
 @bp.route('/refresh-token', methods=['POST', 'GET'])
 def refresh_token():
     current_user = get_jwt_identity()
-    access_token = create_access_token(identity=current_user)
+    db_user = models.User.query.filter_by(name=current_user).first()
+    access_token = create_access_token(identity=db_user)
     res = jsonify(accessToken=access_token)
     set_access_cookies(res, access_token)
     return res, 200
@@ -55,7 +56,8 @@ def login():
         
         password_hash = user.password
         if check_password_hash(password_hash, password):
-            access_token = create_access_token(identity=username)
+            user = models.User.query.filter_by(name=username).first()
+            access_token = create_access_token(identity=user)
             res = jsonify(accessToken=access_token)
             set_access_cookies(res, access_token)
             return res, 200
