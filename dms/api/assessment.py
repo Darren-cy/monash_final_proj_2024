@@ -79,4 +79,4 @@ class AssessmentResource(Resource):
         except IntegrityError:
             dbsession.rollback()
             abort(HTTPStatus.BAD_REQUEST, {"msg": "Unable to add assessment"})
-        return AssessmentSchema().dump(assessment)
+        return AssessmentSchema().dump(assessment), HTTPStatus.CREATED
