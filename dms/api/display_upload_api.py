@@ -19,17 +19,17 @@ def send_static(path):
     return send_from_directory(static_folder, path)
 
 
-@jwt_required()
-@bp.route('/upload', methods=['POST'])
-def upload():
-    try:
-        file = request.files['file']
-        # Create a folder named uploads in the static folder
-        os.makedirs(upload_folder, exist_ok=True)
-        file.save(os.path.join(upload_folder, file.filename))
-        return 'File uploaded successfully', 200
-    except Exception as e:
-        return str(e), 400
+# @jwt_required()
+# @bp.route('/upload', methods=['POST'])
+# def upload():
+#     try:
+#         file = request.files['file']
+#         # Create a folder named uploads in the static folder
+#         os.makedirs(upload_folder, exist_ok=True)
+#         file.save(os.path.join(upload_folder, file.filename))
+#         return 'File uploaded successfully', 200
+#     except Exception as e:
+#         return str(e), 400
     
 @jwt_required()
 @bp.route('/upload/criteria', methods=['POST'])
