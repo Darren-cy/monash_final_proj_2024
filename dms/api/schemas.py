@@ -42,6 +42,9 @@ class AssessmentSchema(Schema):
     owner = fields.Nested(UserSchema, dump_only=True)
     minMarks = fields.Int(dump_only=True)
     maxMarks = fields.Int(dump_only=True)
+    submissions = fields.Nested(
+    lambda: SubmissionSchema(many=True, exclude=("assessment",)),
+    dump_only=True)
 
 
 class MarksSchema(Schema):
