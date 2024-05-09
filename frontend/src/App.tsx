@@ -7,6 +7,7 @@ import DocumentProcessing from "./pages/DocumentProcessing";
 import Profile from "./pages/Profile";
 import Home from "./pages/Home";
 import CreateAssessment from "./pages/CreateAssessment";
+import CreateSubmission from "./pages/CreateSubmission";
 
 function Logout() {
   localStorage.clear();
@@ -29,7 +30,7 @@ function App() {
           }
         />
         <Route
-          path="/document-processing"
+          path="/document-processing/:assessmentId/:submissionId"
           element={
             <ProtectedRoute>
               <DocumentProcessing />
@@ -41,6 +42,14 @@ function App() {
           element={
             <ProtectedRoute>
               <CreateAssessment />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/create-submission/"
+          element={
+            <ProtectedRoute>
+              <CreateSubmission />
             </ProtectedRoute>
           }
         />
