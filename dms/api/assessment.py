@@ -10,36 +10,7 @@ from sqlalchemy.exc import IntegrityError
 
 from dms import db
 from dms.models import Assessment, Criterion
-
-
-class UserSchema(Schema):
-    id = fields.Integer(dump_only=True)
-    name = fields.String()
-
-
-class DocumentSchema(Schema):
-    id = fields.Integer(dump_only=True)
-    name = fields.String()
-
-
-class CriterionSchema(Schema):
-    id = fields.Integer(dump_only=True)
-    name = fields.String(required=True)
-    min = fields.Integer(required=True)
-    max = fields.Integer(required=True)
-
-
-class AssessmentSchema(Schema):
-    id = fields.Integer(dump_only=True)
-    name = fields.String(required=True)
-    ctime = fields.DateTime(attribute="created", dump_only=True)
-    rubric = fields.Nested(DocumentSchema, dump_only=True)
-    rubric_id = fields.Integer(data_key="rubric", load_only=True)
-    criteria = fields.List(fields.Nested(CriterionSchema), required=True)
-    owner = fields.Nested(UserSchema, dump_only=True)
-    minMarks = fields.Int(dump_only=True)
-    maxMarks = fields.Int(dump_only=True)
-
+from .schemas import AssessmentSchema
 
 class AssessmentResource(Resource):
     def _get_assessment(self, id):

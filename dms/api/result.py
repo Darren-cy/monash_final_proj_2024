@@ -1,17 +1,10 @@
-from flask_restful import Resource  # type: ignore
-from dms.models import Submission, Result
-from dms import db
-from .submission import ResultSchema, AssessmentSchema
 from flask import request
+from flask_jwt_extended import current_user, jwt_required
+from flask_restful import Resource  # type: ignore
 from datetime import datetime
-from flask_jwt_extended import jwt_required, current_user
-from marshmallow import Schema, fields
-
-
-class MarksSchema(Schema):
-    assessment = fields.Nested(AssessmentSchema, dump_only=True, only=["name", "id", "minMarks", "maxMarks"])
-    results = fields.Nested(ResultSchema, many=True, required=True)
-    feedback = fields.String()
+from dms import db
+from dms.models import Result, Submission
+from .schemas import MarksSchema
 
 
 class SubmissionResultResource(Resource):
@@ -30,7 +23,7 @@ class SubmissionResultResource(Resource):
                 Result(
                     criterion_id=result["criterion_id"],
                     value=result["value"],
-                    comment = result["comment"],
+                    comment=result["comment"],
                     marker=marker,
                     marked=marked
                 )
