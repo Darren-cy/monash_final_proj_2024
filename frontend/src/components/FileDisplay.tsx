@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
-import { Navigate } from "react-router-dom";
 import api from "../api";
-import { FileUpload } from "primereact/fileupload";
 interface Props {
   fileUrl: string;
   side: "left" | "right";
@@ -9,8 +7,6 @@ interface Props {
 
 const FileDisplay = ({ fileUrl, side }: Props) => {
   const [fileType, setFileType] = useState<string>("");
-  const backendUrl = import.meta.env.VITE_API_URL;
-
 
   useEffect(() => {
     const fetchFile = async () => {
@@ -26,7 +22,7 @@ const FileDisplay = ({ fileUrl, side }: Props) => {
 
   return (
     <div
-      className={`p-1 w-full h-full align-top outline-black outline-offset-2 outline-1  ${
+      className={`p-1 w-full h-500 align-top outline-black outline-offset-2 outline-1  ${
         side === "left" ? "pr-1" : "pl-1"
       }`}
     >
