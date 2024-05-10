@@ -1,17 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import moment from "moment";
 import NavigationBar from "../components/NavigationBar";
 import PopUpPanel from "../components/PopUpPanel";
 import { Data } from "../components/Schemas";
 
 const Dashboard = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [assessments, setAssessment] = useState<Data[]>([]);
+  const [assessments, setAssessments] = useState<Data[]>([]);
 
   const [sortConfig, setSortConfig] = useState({
     key: null,
     direction: "ascending",
   });
+  const [assessment, setAssessment] = useState<Data | null>(null);
+
+  const displayTable = (assessment: Data) => {
+    return <PopUpPanel isOpen={isOpen} items={assessment.submissions} assessment_id={assessment.id} />;
+  }
 
   const backendUrl = import.meta.env.VITE_BACKEND_API_URL;
   useEffect(() => {
@@ -20,7 +26,7 @@ const Dashboard = () => {
       try {
         const response = await fetch(`${backendUrl}/assessment`);
         const jsonData = await response.json();
-        setAssessment(jsonData);
+        setAssessments(jsonData);
         console.log(jsonData);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -55,22 +61,25 @@ const Dashboard = () => {
     throw new Error("Function not implemented.");
   }
 
-  const handleClick = () => {
+  const handleClick = (assessment: Data) => {
     if (isOpen) {
       setIsOpen(false);
+      setAssessment(null);
     }
     else {
       setIsOpen(true);
+      setAssessment(assessment);
     }
   }
 
   return (
+    <>
     <div className="bg-gradient-to-r from-cyan-300 to-blue-200 min-h-screen">
       <NavigationBar />
       <div className="p-6">
         <h1 className="text-xl font-semibold mb-4 text-black">Dashboard</h1>
         <div className="bg-white shadow-md rounded-lg p-4">
-          <table className="min-w-full leading-normal border-collapse border border-gray-300">
+          <table className="min-w-full leading-normal border-collapse border border-gray-300 table-auto">
             <thead>
               <tr>
                 <th
@@ -111,6 +120,7 @@ const Dashboard = () => {
             <tbody>
               {sortedAssessments.map((assessment) => (
                 <tr key={assessment.id} className="hover:bg-gray-100">
+                  
                   <td className="border-b border-gray-300 p-2">
                     {assessment.id}
                   </td>
@@ -121,7 +131,7 @@ const Dashboard = () => {
                     {assessment.rubric.name}
                   </td>
                   <td className="border-b border-gray-300 p-2">
-                    {Date(assessment.ctime).toString()}
+                    {moment(assessment.ctime).format("MMMM Do YYYY, h:mm:ss a")}
                   </td>
                   <td className="border-b border-gray-300 p-2">
                     {assessment.submissions.length}
@@ -133,13 +143,14 @@ const Dashboard = () => {
                     >
                       View
                     </Link> */}
+
+
                     <button
-                      onClick={handleClick}
+                      onClick={() => handleClick(assessment)}
                       className="text-blue-500 hover:text-blue-600"
                     >
                       View
                     </button>
-                    {isOpen && <PopUpPanel isOpen={isOpen} items={assessment.submissions} />}
                   </td>
                 </tr>
               ))}
@@ -148,6 +159,8 @@ const Dashboard = () => {
         </div>
       </div>
     </div>
+    {isOpen && assessment && displayTable(assessment)}
+    </>
   );
 };
 
