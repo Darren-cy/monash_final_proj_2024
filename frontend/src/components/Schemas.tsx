@@ -28,5 +28,22 @@ interface Attachment {
     maxMarks: number;
     submissions: Submission[];
   }
+interface ResultCreate {
+    value: number;
+    criterion: number;
+    comments: string | null;
+}
 
-  export type { Attachment, Submission, Owner, Data };
+  interface MarksCreate{
+    results: ResultCreate[];
+    feedback: string | null;
+  }
+
+  interface CriterionRead {
+    id: number;
+    name: string;
+    minMarks: number;
+    maxMarks: number;
+  }
+
+  export type { Attachment, Submission, Owner, Data, ResultCreate, MarksCreate, CriterionRead };
