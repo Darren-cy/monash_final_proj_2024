@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import moment from "moment";
 import NavigationBar from "../components/NavigationBar";
 import PopUpPanel from "../components/PopUpPanel";
@@ -57,9 +56,13 @@ const Dashboard = () => {
     return sortConfig.direction === "ascending" ? "↑" : "↓";
   };
 
-  function requestSort(arg0: string): void {
-    throw new Error("Function not implemented.");
-  }
+  const requestSort = (key: any) => {
+    let direction = 'ascending';
+    if (sortConfig.key === key && sortConfig.direction === 'ascending') {
+      direction = 'descending';
+    }
+    setSortConfig({ key, direction });
+  };
 
   const handleClick = (assessment: Data) => {
     if (isOpen) {
@@ -137,14 +140,6 @@ const Dashboard = () => {
                     {assessment.submissions.length}
                   </td>
                   <td className="border-b border-gray-300 p-2">
-                    {/* <Link
-                      to={`/document-processing/`}
-                      className="text-blue-500 hover:text-blue-600"
-                    >
-                      View
-                    </Link> */}
-
-
                     <button
                       onClick={() => handleClick(assessment)}
                       className="text-blue-500 hover:text-blue-600"
