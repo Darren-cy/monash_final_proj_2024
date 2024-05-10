@@ -26,23 +26,23 @@ const FileDisplay = ({ fileUrl, side }: Props) => {
 
   return (
     <div
-      className={`p-1 w-1/2 h-500 inline-block align-top outline-black outline-offset-2 outline-1  ${
+      className={`p-1 w-full h-full align-top outline-black outline-offset-2 outline-1  ${
         side === "left" ? "pr-1" : "pl-1"
       }`}
     >
       {(
-        <div>
+        <div className="h-full">
           {fileType.includes("video") ? (
-            <div className="w-full h-full overflow-auto resize self-center" >
-              <video controls src={fileUrl} width="50%" height="auto"/>
+            <div className="w-full h-full overflow-auto resize" >
+              <video controls src={fileUrl} className="w-full h-full"/>
             </div>
           ) : fileType.includes("image") ? (
-            <img src={fileUrl} />
+            <img src={fileUrl} className="w-full h-full object-contain" alt="file" />
           ) : fileType.includes("audio") ? (
-            <audio controls src={fileUrl} />
+            <audio controls src={fileUrl} className="w-full h-full" />
           ) : fileType.includes("pdf") ? (
-            <div className="w-full h-full overflow-auto resize" >
-              <iframe src={fileUrl} width="100%"  height="70%" />
+            <div className="w-full h-full overflow-scroll resize">
+              <iframe src={fileUrl} className="w-full h-full" />
             </div>
           ) : (
             <div>
