@@ -72,6 +72,7 @@ const Dashboard = () => {
     else {
       setIsOpen(true);
       setAssessment(assessment);
+      console.log(assessment);
     }
   }
 
