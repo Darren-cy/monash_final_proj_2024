@@ -10,8 +10,8 @@ const NavigationBar = () => {
         <div className="flex space-x-4">
           <Link to="/" className="text-blue-500 hover:text-blue-700 font-semibold">Home</Link>
           <Link to="/dashboard" className="text-blue-500 hover:text-blue-700 font-semibold">Dashboard</Link>
-          <Link to="/create-assessment" className="text-blue-500 hover:text-blue-700 font-semibold">Create Assessment</Link>
-          <Link to="/create-submission" className="text-blue-500 hover:text-blue-700 font-semibold">Create Submission</Link>
+          {isLogin() && <Link to="/create-assessment" className="text-blue-500 hover:text-blue-700 font-semibold">Create Assessment</Link>}
+          {isLogin() && <Link to="/create-submission" className="text-blue-500 hover:text-blue-700 font-semibold">Create Submission</Link>}    
         </div>
         {isLogin() ? (
            <div className="flex space-x-4">
