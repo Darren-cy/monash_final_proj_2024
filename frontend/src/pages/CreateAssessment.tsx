@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import api from "../api";
 import {Link, Navigate, useNavigate} from "react-router-dom";
+import NavigationBar from "../components/NavigationBar";
 
 interface AssessmentPost {
   name: string;
@@ -74,7 +75,9 @@ const CreateAssessment = () => {
 }
 
 return (
-<div className="max-w-lg mx-auto border border-gray-300 p-6 rounded-md">
+<>
+<NavigationBar />
+<div className="max-w-lg mx-auto border border-gray-300 p-6 rounded-md m-5">
     <h1 className="text-2xl font-bold mb-4">Create Assessment</h1>
     <form onSubmit={handleSubmit} className="space-y-4">
         <div>
@@ -107,7 +110,7 @@ return (
     </form>
 </div>
 
-
+</>
 );
 };
 

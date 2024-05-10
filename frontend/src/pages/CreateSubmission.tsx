@@ -1,5 +1,6 @@
 import { useState } from "react";
 import api from "../api";
+import NavigationBar from "../components/NavigationBar";
 
 interface Submission {
   attachments: number[];
@@ -68,101 +69,104 @@ const CreateSubmission = () => {
     setAssessmentId(parseInt(e.target.value));
   };
   return (
-    <div className="flex justify-center">
-      {/* Left Form */}
-      <div className="w-1/2 max-w-md mx-4">
-        <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <h2 className="text-xl mb-4">Create author</h2>
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="author_name"
-            >
-              Author Name
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="author_name"
-              type="text"
-              placeholder="Author Name"
-              onChange={handleAuthorChange}
-              required
-            />
-          </div>
-          <div className="flex items-center justify-between">
-            <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              type="button"
-              onClick={handleAuthorSubmit} // Attach event handler
-            >
-              Create Author
-            </button>
-          </div>
-        </form>
+    <>
+    <NavigationBar />
+      <div className="flex justify-center m-5">
+        {/* Left Form */}
+        <div className="w-1/2 max-w-md mx-4">
+          <form className="max-w-lg mx-auto border border-gray-300 p-6 rounded-md px-8 pt-6 pb-8 mb-4 ">
+            <h2 className="text-xl mb-4">Create author</h2>
+            <div className="mb-4">
+              <label
+                className="block text-gray-700 text-sm font-bold mb-2"
+                htmlFor="author_name"
+              >
+                Author Name
+              </label>
+              <input
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="author_name"
+                type="text"
+                placeholder="Author Name"
+                onChange={handleAuthorChange}
+                required
+              />
+            </div>
+            <div className="flex items-center justify-between">
+              <button
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                type="button"
+                onClick={handleAuthorSubmit} // Attach event handler
+              >
+                Create Author
+              </button>
+            </div>
+          </form>
 
-        {/* Display author */}
-        {author != null && (
-          <div className="bg-white shadow-md rounded p-4 mt-4">
-            <h2 className="text-xl mb-4">Author</h2>
-            <p>
-              <span className="font-bold">ID:</span> {author.id}
-            </p>
-            <p>
-              <span className="font-bold">Name:</span> {author.name}
-            </p>
-          </div>
-        )}
-      </div>
+          {/* Display author */}
+          {author != null && (
+            <div className="max-w-lg mx-auto border border-gray-300 p-6 rounded-md mt-4">
+              <h2 className="text-xl mb-4">Author</h2>
+              <p>
+                <span className="font-bold">ID:</span> {author.id}
+              </p>
+              <p>
+                <span className="font-bold">Name:</span> {author.name}
+              </p>
+            </div>
+          )}
+        </div>
 
-      {/* Right Form */}
-      <div className="w-1/2 max-w-md mx-4">
-        <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <h2 className="text-xl mb-4">Create submission</h2>
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="assessment_id"
-            >
-              Assessment ID
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="asessment_id"
-              type="number"
-              placeholder="Assessment ID"
-              value={assessment_id}
-              onChange={handleChangeAsessmentId}
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="file"
-            >
-              File
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="file"
-              type="file"
-              placeholder="File"
-              onChange={handleFileChange}
-              required
-            />
-          </div>
-          <div className="flex items-center justify-between">
-            <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              type="button"
-              onClick={handleSubmissionSubmit} // Attach event handler
-            >
-              Submit
-            </button>
-          </div>
-        </form>
+        {/* Right Form */}
+        <div className="w-1/2 max-w-md mx-4 border border-gray-300 p-6 rounded-md">
+          <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            <h2 className="text-xl mb-4">Create submission</h2>
+            <div className="mb-4">
+              <label
+                className="block text-gray-700 text-sm font-bold mb-2"
+                htmlFor="assessment_id"
+              >
+                Assessment ID
+              </label>
+              <input
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="asessment_id"
+                type="number"
+                placeholder="Assessment ID"
+                value={assessment_id}
+                onChange={handleChangeAsessmentId}
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label
+                className="block text-gray-700 text-sm font-bold mb-2"
+                htmlFor="file"
+              >
+                File
+              </label>
+              <input
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="file"
+                type="file"
+                placeholder="File"
+                onChange={handleFileChange}
+                required
+              />
+            </div>
+            <div className="flex items-center justify-between">
+              <button
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                type="button"
+                onClick={handleSubmissionSubmit} // Attach event handler
+              >
+                Submit
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
