@@ -1,8 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import FileDisplay from "../components/FileDisplay";
 import NavigationBar from "../components/NavigationBar";
-import { ResizableBox } from "react-resizable";
 import { useLocation } from "react-router-dom";
 import "react-resizable/css/styles.css";
 import api from "../api";
@@ -10,6 +9,7 @@ import {
   MarksCreate,
   ResultCreate,
   CriterionRead,
+  CriterionCreate,
 } from "../components/Schemas";
 
 const DocumentProcessing = () => {
@@ -19,8 +19,11 @@ const DocumentProcessing = () => {
   const assessmentId = location.pathname.split("/")[2];
   const submissionId = location.pathname.split("/")[3];
   const editorRef = useRef(null as any);
+  const [minMarks, setMinMarks] = useState<number>(0);
+  const [maxMarks, setMaxMarks] = useState<number>(0);
+  const [results, setResults] = useState<ResultCreate[]>([]);
   const [doc, setDoc] = useState("");
-  const [mark, setMark] = useState("");
+  const [marks, setMark] = useState<ResultCreate[] | null>([]);
   const [fileID, setFileID] = useState<any>(null);
   const [rubricID, setRubricID] = useState<any>(null);
   const [criterias, setCriterias] = useState<CriterionRead[]>([]);
@@ -28,6 +31,7 @@ const DocumentProcessing = () => {
   useEffect(() => {
     fetchFileID(false);
     fetchFileID(true);
+    fetchResults();
   }, []);
 
   const fetchFileID = async (isRubric: boolean) => {
@@ -39,6 +43,8 @@ const DocumentProcessing = () => {
         const jsonAssessment = await response.json();
         setRubricID(jsonAssessment.rubric.id);
         setCriterias(jsonAssessment.criteria);
+        setMinMarks(jsonAssessment.minMarks);
+        setMaxMarks(jsonAssessment.maxMarks);
       } else {
         const response = await fetch(
           `${backendUrlApi}/submission/${submissionId}`
@@ -53,10 +59,12 @@ const DocumentProcessing = () => {
 
   const fetchResults = async () => {
     try {
-      const response = await api.get(
+      const response = await fetch(
         `${backendUrlApi}/submission/${submissionId}/mark`
       );
-      console.log(response);
+      const jsonResults = await response.json();
+      setDoc(jsonResults.feedback);
+      editorRef.current.setContent(jsonResults.feedback);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -65,9 +73,10 @@ const DocumentProcessing = () => {
   const handleSubmit = async () => {
     try {
       const marks: MarksCreate = {
-        results: [],
-        feedback: doc,
+        results: results,
+        feedback: editorRef.current.getContent(),
       };
+      console.log(marks);
       const response = await api.post(
         `${backendUrlApi}/submission/${submissionId}/mark`,
         marks
@@ -78,18 +87,11 @@ const DocumentProcessing = () => {
     }
   };
 
-  const log = () => {
-    if (editorRef.current) {
-      console.log(editorRef.current.getContent());
-      setDoc(editorRef.current.getContent());
-    }
-  };
-
   return (
     <div className="bg-gradient-to-r from-cyan-300 to-blue-200 min-h-screen">
       <NavigationBar />
       <div className="p-6 text-black flex flex-col h-full">
-        <div className="flex h-500">
+        <div className="flex h-full">
           <div className="flex-1 pl-2 w-full">
             <h2 className="text-lg font-semibold mb-2">Student Submission</h2>
             <FileDisplay
@@ -132,19 +134,26 @@ const DocumentProcessing = () => {
             <div key={criteria.id}>
               <h2 className="text-lg font-semibold mb-2">{criteria.name}</h2>
               <p>
-                {criteria.minMarks} - {criteria.maxMarks}
+                {minMarks} - {maxMarks}
               </p>
               <input
                 type="number"
                 placeholder="Enter mark"
                 className="border border-gray-300 rounded p-2 w-1/4"
-                onChange={(e) => setMark(e.target.value)}
+                onChange={(e) => {
+                  const result: ResultCreate = {
+                    value: parseInt(e.target.value),
+                    criterion: criteria.id,
+                  };
+                  setResults([result]);
+                }}
+                required
               />
             </div>
           ))}
           <div className="mt-2">
             <button
-              onClick={log}
+              onClick={handleSubmit}
               className="mt-8 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             >
               Submit Feedback
