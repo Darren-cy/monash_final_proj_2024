@@ -83,7 +83,7 @@ def logout():
 def profile():
     try:
         current_user = get_jwt_identity()
-        user = models.User.query.filter_by(name=current_user).first()
+        user = models.User.query.filter_by(id=current_user).first()
         return jsonify({"username": user.name, "email": user.email}), 200
     except Exception as e:
         return jsonify({"error": {e}}), 400
