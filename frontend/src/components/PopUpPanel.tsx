@@ -17,13 +17,12 @@ const PopUpPanel = ({
       <table className=" w-full table-auto">
         <thead className="">
           <tr className="bg-gray-100">
-            <th className="border px-4 py-2">ID</th>
+            <th className="border px-4 py-2">Submission ID</th>
             <th className="border px-4 py-2">Submitted On</th>
             <th className="border px-4 py-2">Total Marks</th>
             <th className="border px-4 py-2">Attachments</th>
             <th className="border px-4 py-2">Authors</th>
-            <th className="border px-4 py-2">Results</th>
-            <th className="border px-4 py-2">Feedback</th>
+            <th className="border px-4 py-2">Status</th>
             <th className="border px-4 py-2">Actions</th>
           </tr>
         </thead>
@@ -40,12 +39,11 @@ const PopUpPanel = ({
                 {item.attachments.map((attachment) => attachment.name).join("")}
               </td>
               <td className="border px-4 py-2">
-                {item.authors.map((author) => author.name).join("")}
+                {item.authors.map((author) => author.name).join(",")}
               </td>
-              <td className="border px-4 py-2">
-                {item.results.map((result) => result.marks).join("")}
-              </td>
-              <td className="border  wrap text-ellipsis">{item.feedback}</td>
+              <td className="border wrap text-wrap">{
+                item.feedback ? "Graded" : "Not Graded"
+              }</td>
               <td className="border px-4 py-2">
                 <button
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
