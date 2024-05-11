@@ -1,6 +1,7 @@
 import { useState } from "react";
 import api from "../api";
 import NavigationBar from "../components/NavigationBar";
+import { Helmet } from "react-helmet";
 
 interface Submission {
   attachments: number[];
@@ -55,7 +56,7 @@ const CreateSubmission = () => {
     setAuthor({ ...author, name: e.target.value });
   };
   const handleSubmissionSubmit = () => {
-    // assessment_id =
+    submission.authors = [author.id];
     const url = `/api/v1.0/assessment/${assessment_id}/submission`;
     api
       .post(url, submission)
@@ -72,6 +73,9 @@ const CreateSubmission = () => {
   };
   return (
     <>
+      <Helmet>
+        <title>Create Submission</title>
+      </Helmet>
         <NavigationBar />
         <div className="flex justify-center m-5 ">
           {/* Left Form */}
