@@ -3,6 +3,7 @@ import api from "../api";
 import { useNavigate } from "react-router-dom";
 import NavigationBar from "../components/NavigationBar";
 import { CriterionCreate } from "../components/Schemas";
+import { Helmet } from "react-helmet";
 
 interface AssessmentPost {
   name: string;
@@ -61,6 +62,9 @@ const CreateAssessment = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Create Assessment</title>
+      </Helmet>
       <div className="bg-gradient-to-r from-cyan-300 to-blue-200 min-h-screen">
         <NavigationBar />
         <div className="max-w-lg mx-auto border border-gray-300 p-6 rounded-md m-5 bg-white">

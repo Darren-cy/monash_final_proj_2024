@@ -3,6 +3,7 @@ import moment from "moment";
 import NavigationBar from "../components/NavigationBar";
 import PopUpPanel from "../components/PopUpPanel";
 import { Data } from "../components/Schemas";
+import { Helmet } from "react-helmet";
 
 const Dashboard = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -78,6 +79,9 @@ const Dashboard = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Dashboard</title>
+      </Helmet>
     <div className="bg-gradient-to-r from-cyan-300 to-blue-200 min-h-screen">
       <NavigationBar />
       <div className="p-6">
