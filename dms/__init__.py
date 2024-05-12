@@ -37,14 +37,6 @@ def create_app(test_config=None):
     # Initialize the database
     db.init_app(app)
     ma.init_app(app)
-    # Create the user model
-    # from .models import User, Document
-
-    # Create the database tables
-    # with app.app_context():
-    # db.create_all()
-    # db.session.commit()
-    # current_app.db = db
 
     # Set up the JWT manager
     jwt.init_app(app)

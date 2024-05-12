@@ -1,6 +1,5 @@
 from http import HTTPStatus
 
-from flask import current_app
 from flask_restful import Resource  # type: ignore
 from sqlalchemy import select
 from sqlalchemy.exc import NoResultFound

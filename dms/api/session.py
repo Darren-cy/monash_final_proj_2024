@@ -1,7 +1,7 @@
 from http import HTTPStatus
 from werkzeug.security import check_password_hash
 
-from flask import current_app, abort, jsonify
+from flask import abort, jsonify
 from flask_restful import Resource  # type: ignore
 from flask_restful.reqparse import RequestParser  # type: ignore
 from sqlalchemy import select
