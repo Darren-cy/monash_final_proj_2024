@@ -4,9 +4,11 @@ from dotenv import load_dotenv
 from flask import Flask, current_app, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
+from flask_migrate import Migrate
 
 db: SQLAlchemy = SQLAlchemy()
 jwt: JWTManager = JWTManager()
+migrate: Migrate = Migrate()
 
 
 def create_app(test_config=None):
@@ -32,16 +34,19 @@ def create_app(test_config=None):
     db.init_app(app)
 
     # Create the user model
-    from .models import User, Document
+    # from .models import User, Document
 
     # Create the database tables
-    with app.app_context():
-        db.create_all()
-        db.session.commit()
-        current_app.db = db
+    # with app.app_context():
+    # db.create_all()
+    # db.session.commit()
+    # current_app.db = db
 
     # Set up the JWT manager
     jwt.init_app(app)
+
+    # Set up the migration manager
+    migrate.init_app(app, db)
 
     # Register the index route
     @app.route('/')
