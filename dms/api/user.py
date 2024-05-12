@@ -6,11 +6,12 @@ from sqlalchemy import select
 from sqlalchemy.exc import NoResultFound
 
 from dms.models import User
+from dms import db
 
 
 class UserResource(Resource):
     def get(self, id):
-        session = current_app.db.session
+        session = db.session
         query = select(User).where(User.id == id)
         try:
             user = session.scalars(query).one()

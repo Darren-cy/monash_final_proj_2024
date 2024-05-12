@@ -14,6 +14,7 @@ from sqlalchemy.exc import IntegrityError
 from werkzeug.utils import secure_filename
 
 from dms.models import Document
+from dms import db
 
 FILE_UPLOAD_PATH = r"d:\projects\fitproject\instance\uploads"
 
@@ -40,13 +41,13 @@ class DocumentResource(Resource):
     @marshal_with(document_fields)
     def _get_documents(self):
         query = Select(Document)
-        session = current_app.db.session
+        session = db.session
         documents = session.scalars(query).all()
         return documents
 
     @marshal_with(document_fields)
     def _get_document(self, id):
-        return current_app.db.get_or_404(Document, id)
+        return db.get_or_404(Document, id)
 
     def get(self, id=None):
         if id is None:
@@ -66,7 +67,7 @@ class DocumentResource(Resource):
         document = Document(
             filename=str(uuid), name=filename, uploaded=uploaded, mime=mime,
             owner=current_user)
-        session = current_app.db.session
+        session = db.session
         try:
             session.add(document)
             file.save(os.path.join(FILE_UPLOAD_PATH, document.filename))
@@ -81,7 +82,7 @@ class DocumentResource(Resource):
 
 class DocumentDownloadResource(Resource):
     def get(self, id):
-        document: Document = current_app.db.get_or_404(Document, id)
+        document: Document = db.get_or_404(Document, id)
         return send_from_directory(
             FILE_UPLOAD_PATH, document.filename, mimetype=document.mime,
             download_name=document.name, last_modified=document.uploaded)
