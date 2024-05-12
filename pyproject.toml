@@ -1,0 +1,12 @@
+[project]
+name = "dms"
+dynamic = ["version"]
+description = 'FIT3161/62 CS09 project'
+readme = "README.md"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+path = "dms/__about__.py"
