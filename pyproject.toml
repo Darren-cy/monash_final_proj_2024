@@ -10,3 +10,10 @@ build-backend = "hatchling.build"
 
 [tool.hatch.version]
 path = "dms/__about__.py"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.coverage.run]
+branch = true
+source = ["dms"]
