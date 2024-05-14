@@ -1,13 +1,15 @@
 import pytest
+from conftest import AuthActions
+from flask.testing import FlaskClient
+from http import HTTPStatus
 
 
-def test_login_valid_credentials(client, auth):
-    assert auth.login().status_code == 200
+def test_login_valid_credentials(client: FlaskClient, auth: AuthActions):
+    assert auth.login().status_code == HTTPStatus.OK
 
 
-@pytest.mark.xfail
-def test_login_invalid_credentials(app):
-    raise NotImplementedError
+def test_login_invalid_credentials(client: FlaskClient, auth: AuthActions):
+    assert auth.login(email="invalid@domain.com", password="InvalidPassword") == HTTPStatus.FORBIDDEN
 
 
 @pytest.mark.xfail
