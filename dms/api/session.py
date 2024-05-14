@@ -20,7 +20,7 @@ parser.add_argument("password", required=True)
 
 def abort_on_invalid_credentials():
     abort(
-        HTTPStatus.UNAUTHORIZED, message="The email or password is incorrect.")
+        HTTPStatus.UNAUTHORIZED, "The email or password is incorrect.")
 
 
 class SessionResource(Resource):
