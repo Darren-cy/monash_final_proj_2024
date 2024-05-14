@@ -18,7 +18,7 @@ class AuthActions:
             self,
             email: str | None = None,
             password: str | None = None
-    ) -> dict[str, str]:
+            ) -> dict[str, str]:
         return {
             "email": self.__default_email if email is None else email,
             "password":
@@ -28,14 +28,19 @@ class AuthActions:
     def __init__(self, client: FlaskClient):
         self._client = client
 
-    def login(self, email="test@example.com", password="Test_Password_42"):
+    def login(self, email=None, password=None, **kwargs):
         return self._client.post(
             "/api/v1.0/session",
-            json=self.__get_credentials(email=email, password=password)
+            json=self.__get_credentials(email=email, password=password),
+            **kwargs
         )
 
-    def logout(self):
-        return self._client.delete("/api/v1.0/session")
+    def logout(self, **kwargs):
+        return self._client.delete("/api/v1.0/session", **kwargs)
+
+    @classmethod
+    def get_headers(cls, response):
+        return {"Authorization": f"Bearer {response.json['access_token']}"}
 
 
 with open(os.path.join(os.path.dirname(__file__), "data.sql"), "r") as file:
@@ -64,7 +69,7 @@ def app():
     yield app
 
     os.close(db_fp)
-    # os.remove(db_path)
+    os.remove(db_path)
 
 
 @pytest.fixture
