@@ -2,7 +2,6 @@ import os
 import os.path
 import tempfile
 
-import flask_migrate
 import pytest
 from flask.testing import FlaskClient
 from sqlalchemy import URL, text
@@ -12,6 +11,19 @@ from dms import create_app, db
 
 class AuthActions:
     _client: FlaskClient
+    __default_email: str = "test@example.com"
+    __default_password: str = "Test_Password_42"
+
+    def __get_credentials(
+            self,
+            email: str | None = None,
+            password: str | None = None
+    ) -> dict[str, str]:
+        return {
+            "email": self.__default_email if email is None else email,
+            "password":
+                self.__default_password if password is None else password
+        }
 
     def __init__(self, client: FlaskClient):
         self._client = client
@@ -19,10 +31,7 @@ class AuthActions:
     def login(self, email="test@example.com", password="Test_Password_42"):
         return self._client.post(
             "/api/v1.0/session",
-            json={
-                "email": email,
-                "password": password
-            }
+            json=self.__get_credentials(email=email, password=password)
         )
 
     def logout(self):
