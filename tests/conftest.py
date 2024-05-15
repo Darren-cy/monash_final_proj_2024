@@ -48,10 +48,8 @@ with open(os.path.join(os.path.dirname(__file__), "data.sql"), "r") as file:
 
 
 @pytest.fixture
-def app():
-    db_fp, db_path = tempfile.mkstemp()
-    db_url = URL.create("sqlite", database=db_path)
-    print(str(db_url))
+def app(tmp_path):
+    db_url = URL.create("sqlite", database=os.path.join(tmp_path, "temp.db"))
 
     app = create_app({
         "TESTING": True,
@@ -67,9 +65,6 @@ def app():
         db.session.commit()
 
     yield app
-
-    os.close(db_fp)
-    os.remove(db_path)
 
 
 @pytest.fixture
