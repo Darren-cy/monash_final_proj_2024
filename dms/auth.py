@@ -10,6 +10,7 @@ from sqlalchemy.exc import IntegrityError, NoResultFound
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from dms.models import User
+from . import db
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -42,7 +43,7 @@ def register():
             try:
                 user = User(name=name, email=email,
                             password=generate_password_hash(password))
-                session = current_app.db.session
+                session = db.session
                 session.add(user)
                 session.commit()
             except IntegrityError:
@@ -78,7 +79,7 @@ def login():
         if error is None:
             try:
                 statement = select(User).where(User.email == email)
-                dbsession = current_app.db.session
+                dbsession = db.session
                 user = dbsession.scalars(statement).one()
             except NoResultFound:
                 error = "No account found."
@@ -154,7 +155,7 @@ def reset_password(token):
 
         if error is None:
             user.password = generate_password_hash(password)
-            current_app.db.session.commit()
+            db.session.commit()
             flash("Your password has been changed.")
             return redirect(url_for("auth.login"))
 
@@ -170,7 +171,7 @@ def load_logged_in_user():
     if userId is None:
         g.user = None
     else:
-        g.user = current_app.db.session.query(
+        g.user = db.session.query(
             User).filter_by(id=userId).first()
 
 
