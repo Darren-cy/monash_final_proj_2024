@@ -31,7 +31,6 @@ const Form = ({ route, method }: { route: string; method: string }) => {
         });
       }
       if (method === "login") {
-        alert("User logged in successfully");
         localStorage.setItem(ACCESS_TOKEN, response.data.accessToken);
         navigate("/dashboard");
       } else {
