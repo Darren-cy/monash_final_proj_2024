@@ -120,7 +120,7 @@ const DocumentProcessing = () => {
             <Editor
               apiKey={apikey}
               onInit={(_, editor) => (editorRef.current = editor)}
-              initialValue="<p>Leave your feedback here...</p>"
+              initialValue={doc? doc : "Leave your feedback here..."}
               init={{
                 height: 150,
                 menubar: false,
