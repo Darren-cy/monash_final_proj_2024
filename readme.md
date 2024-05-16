@@ -55,6 +55,7 @@ DATABASE_URL=postgresql://<username>:<password>@localhost:5432/<database_name>
 JWT_SECRET_KEY="YourSecretKey"
 VITE_API_URL="http://localhost:5000"
 VITE_BACKEND_API_URL="http://localhost:5000/api/v1.0"
+VITE_TINYMCE_API_KEY="5yvunx1guc0lr4adzohtbndujkqku1ett0wj78ajur6497i3"
 ```
 
 Create the .flaskenv file which contains the following info:
