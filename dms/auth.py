@@ -7,9 +7,9 @@ from itsdangerous.exc import BadTimeSignature, SignatureExpired
 from itsdangerous.url_safe import URLSafeTimedSerializer
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError, NoResultFound
-from werkzeug.security import check_password_hash, generate_password_hash
 
 from dms.models import User
+
 from . import db
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
@@ -42,7 +42,7 @@ def register():
         if error is None:
             try:
                 user = User(name=name, email=email,
-                            password=generate_password_hash(password))
+                            password=password)
                 session = db.session
                 session.add(user)
                 session.commit()
@@ -80,11 +80,11 @@ def login():
             try:
                 statement = select(User).where(User.email == email)
                 dbsession = db.session
-                user = dbsession.scalars(statement).one()
+                user: User = dbsession.scalars(statement).one()
             except NoResultFound:
                 error = "No account found."
             else:
-                if not check_password_hash(user.password, password):
+                if not user.check_password_hash(password):
                     error = "Password is incorrect."
 
         if error is None:
@@ -107,7 +107,7 @@ def forgot_password():
             error = "Email is required."
         else:
             try:
-                emailInfo = validate_email(email)
+                emailInfo = validate_email(email, check_deliverability=False)
                 email = emailInfo.normalized
             except EmailNotValidError:
                 error = "You must enter a valid email address."
@@ -154,7 +154,7 @@ def reset_password(token):
             error = "Passwords must match."
 
         if error is None:
-            user.password = generate_password_hash(password)
+            user.password = password
             db.session.commit()
             flash("Your password has been changed.")
             return redirect(url_for("auth.login"))
