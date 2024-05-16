@@ -37,7 +37,7 @@ Install the latest Postgresql and run the following commands in the terminal:
 psql -U postgres
 ```
 
-Then input the password when installing postgresql and run these commands(semi-column is important):
+Then input the password when installing postgresql and run these commands (semicolons are important):
 
 ```
 CREATE DATABASE <database_name>;
