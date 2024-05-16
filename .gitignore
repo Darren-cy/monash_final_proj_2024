@@ -288,5 +288,6 @@ migrations/*
 *.pdf
 *.mp3
 *.mp4
+dms/api/uploads/*
 
 # End of https://www.toptal.com/developers/gitignore/api/python,venv,visualstudiocode,windows,macos,linux
