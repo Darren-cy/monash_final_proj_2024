@@ -45,10 +45,10 @@ The API is at `/api/v1.0/`.
 ### Assessments
 
 | Action                    | Method | Endpoint           | Data                      | Response                      | Authorization |
-+---------------------------+--------+--------------------+---------------------------+-------------------------------+---------------+
+|---------------------------|--------|--------------------|---------------------------|-------------------------------|---------------|
 | Get a list of assessments | GET    | `/assessment`      |                           | List[[AssessmentRead object]] | Not required  |
 | Get a specific assessment | GET    | `/assessment/<id>` |                           | [AssessmentRead object]       | Not required  |
-| Create an assessment      | POST   | `/assessment`      | [AssessmentCreate object] | [AssessmentRead object]       | Required |
+| Create an assessment      | POST   | `/assessment`      | [AssessmentCreate object] | [AssessmentRead object]       | Required      |
 
 
 ### Submissions
