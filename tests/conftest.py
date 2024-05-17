@@ -80,3 +80,9 @@ def runner(app):
 @pytest.fixture
 def auth(client):
     return AuthActions(client)
+
+
+@pytest.fixture
+def app_context(app):
+    with app.app_context():
+        yield
