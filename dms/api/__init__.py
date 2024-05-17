@@ -1,6 +1,8 @@
+from http import HTTPStatus
 from flask import Blueprint, json, request
 from flask_restful import Api  # type: ignore
 from werkzeug.exceptions import HTTPException, NotFound
+from marshmallow.exceptions import ValidationError
 
 from .session import SessionResource
 from .user import UserResource
@@ -14,7 +16,7 @@ from .result import SubmissionResultResource
 bp = Blueprint('api', __name__, url_prefix='/api/v1.0')
 api = Api(bp)
 
-api.add_resource(UserResource, "/user/<int:id>")
+api.add_resource(UserResource, "/user", "/user/<int:id>")
 api.add_resource(SessionResource, "/session")
 api.add_resource(DocumentResource, "/document", "/document/<int:id>")
 api.add_resource(DocumentDownloadResource, "/document/<int:id>/download")
@@ -39,3 +41,8 @@ def api_not_found(e):
     if request.path.startswith(bp.url_prefix):
         return api_error(e)
     return e
+
+
+@bp.errorhandler(ValidationError)
+def invalid_data(e: ValidationError):
+    return {"message": e.messages}, HTTPStatus.UNPROCESSABLE_ENTITY
