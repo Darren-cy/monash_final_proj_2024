@@ -1,20 +1,8 @@
-import { useState } from "react";
-import api from "../api";
 import NavigationBar from "../components/NavigationBar";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
 
 const Home = () => {
-  const [message, setMessage] = useState("");
-  const getData = async () => {
-    try {
-      const response = await api.get("/api/v1.0/protected");
-      setMessage(response.data.message);
-      console.log(response.data);
-    } catch (error) {
-      setMessage("An error occurred");
-    }
-  };
   return (
     <>
       <Helmet>

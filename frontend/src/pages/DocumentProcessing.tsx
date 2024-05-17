@@ -9,7 +9,6 @@ import {
   MarksCreate,
   ResultCreate,
   CriterionRead,
-  CriterionCreate,
 } from "../components/Schemas";
 import { Helmet } from "react-helmet";
 
@@ -25,7 +24,6 @@ const DocumentProcessing = () => {
   const [maxMarks, setMaxMarks] = useState<number>(0);
   const [results, setResults] = useState<ResultCreate[]>([]);
   const [doc, setDoc] = useState("");
-  const [marks, setMark] = useState<ResultCreate[] | null>([]);
   const [fileID, setFileID] = useState<any>(null);
   const [rubricID, setRubricID] = useState<any>(null);
   const [criterias, setCriterias] = useState<CriterionRead[]>([]);
