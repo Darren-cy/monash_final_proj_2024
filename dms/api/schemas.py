@@ -9,6 +9,8 @@ class AuthorSchema(Schema):
 class UserSchema(Schema):
     id = fields.Integer(dump_only=True)
     name = fields.String()
+    email = fields.Email()
+    password = fields.String(load_only=True)
 
 
 class DocumentSchema(Schema):
