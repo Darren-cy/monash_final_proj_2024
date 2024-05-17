@@ -1,6 +1,5 @@
 import os
 import os.path
-import tempfile
 
 import pytest
 from flask.testing import FlaskClient
@@ -18,7 +17,7 @@ class AuthActions:
             self,
             email: str | None = None,
             password: str | None = None
-            ) -> dict[str, str]:
+    ) -> dict[str, str]:
         return {
             "email": self.__default_email if email is None else email,
             "password":
