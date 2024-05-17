@@ -23,3 +23,12 @@ def test_get_author(client, author):
     response = client.get(f"/api/v1.0/person/{author["id"]}")
     assert response.status_code == HTTPStatus.OK
     assert response.json == author
+
+
+def test_create_author(client):
+    new_author = {"name": "Shufen Wang"}
+    response = client.post("/api/v1.0/person", json=new_author)
+    assert response.status_code == HTTPStatus.OK
+    new_author["id"] = 6
+    assert response.json == new_author
+    test_get_author(client=client, author=new_author)
