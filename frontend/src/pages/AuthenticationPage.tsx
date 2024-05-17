@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Form from "../components/Form";
 import NavigationBar from "../components/NavigationBar";
 import { Helmet } from "react-helmet";
