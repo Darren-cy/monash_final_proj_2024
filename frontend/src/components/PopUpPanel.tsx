@@ -13,8 +13,8 @@ const PopUpPanel = ({
   const navigate = useNavigate();
   if (!isOpen) return null;
   return (
-    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded shadow-lg p-4">
-      <table className=" w-full table-auto">
+    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white shadow-md rounded rounded-lg p-4 w-5/6">
+      <table className="min-w-full leading-normal border-collapse border border-gray-100 table-auto">
         <thead className="">
           <tr className="bg-gray-100">
             <th className="border px-4 py-2">Submission ID</th>

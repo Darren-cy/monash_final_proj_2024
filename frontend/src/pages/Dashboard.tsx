@@ -91,25 +91,25 @@ const Dashboard = () => {
             <thead>
               <tr>
                 <th
-                  className="border-b border-gray-300 cursor-pointer p-2 text-left"
+                  className="border-b border-gray-300 cursor-pointer p-2 text-left border"
                   onClick={() => requestSort("assessment_id")}
                 >
                   Assessment ID <SortIcon columnName="assessment_id" />
                 </th>
                 <th
-                  className="border-b border-gray-300 cursor-pointer p-2 text-left"
+                  className="border-b border-gray-300 cursor-pointer p-2 text-left border"
                   onClick={() => requestSort("assessmentName")}
                 >
                   Assessment Name <SortIcon columnName="assessmentName" />
                 </th>
                 <th
-                  className="border-b border-gray-300 cursor-pointer p-2 text-left"
+                  className="border-b border-gray-300 cursor-pointer p-2 text-left border"
                   onClick={() => requestSort("fileName")}
                 >
-                  File Name <SortIcon columnName="fileName" />
+                  Rubric File Name <SortIcon columnName="fileName" />
                 </th>
                 <th
-                  className="border-b border-gray-300 cursor-pointer p-2 text-left"
+                  className="border-b border-gray-300 cursor-pointer p-2 text-left border"
                   onClick={() => requestSort("date")}
                 >
                   Created on <SortIcon columnName="date" />
@@ -118,10 +118,10 @@ const Dashboard = () => {
                   className="border-b border-gray-300 cursor-pointer p-2 text-left"
                   onClick={() => requestSort("no_submission")}
                 >
-                  No Submission <SortIcon columnName="no_submission" />
+                  No. Submission <SortIcon columnName="no_submission" />
                 </th>
                 <th className="border-b border-gray-300 p-2 text-left">
-                  Actions
+                  
                 </th>
               </tr>
             </thead>
@@ -129,27 +129,27 @@ const Dashboard = () => {
               {sortedAssessments.map((assessment) => (
                 <tr key={assessment.id} className="hover:bg-gray-100">
                   
-                  <td className="border-b border-gray-300 p-2">
+                  <td className="border-b border-gray-300 p-2 border">
                     {assessment.id}
                   </td>
-                  <td className="border-b border-gray-300 p-2">
+                  <td className="border-b border-gray-300 p-2 border">
                     {assessment.name}
                   </td>
-                  <td className="border-b border-gray-300 p-2">
+                  <td className="border-b border-gray-300 p-2 border">
                     {assessment.rubric.name}
                   </td>
-                  <td className="border-b border-gray-300 p-2">
+                  <td className="border-b border-gray-300 p-2 border">
                     {moment(assessment.ctime).format("MMMM Do YYYY, h:mm:ss a")}
                   </td>
-                  <td className="border-b border-gray-300 p-2">
+                  <td className="border-b border-gray-300 p-2 ">
                     {assessment.submissions.length}
                   </td>
-                  <td className="border-b border-gray-300 p-2">
+                  <td className="border-b border-gray-300 p-2 text-center ">
                     <button
                       onClick={() => handleClick(assessment)}
-                      className="text-blue-500 hover:text-blue-600"
+                      className="mt-0 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                     >
-                      View
+                      Details
                     </button>
                   </td>
                 </tr>
