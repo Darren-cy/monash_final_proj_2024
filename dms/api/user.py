@@ -1,5 +1,6 @@
 from http import HTTPStatus
 
+from flask import abort
 from flask_restful import Resource  # type: ignore
 from sqlalchemy import select
 from sqlalchemy.exc import NoResultFound
@@ -15,7 +16,7 @@ class UserResource(Resource):
         try:
             user = session.scalars(query).one()
         except NoResultFound:
-            return {"error": "User not found."}, HTTPStatus.NOT_FOUND
+            abort(HTTPStatus.NOT_FOUND, f"User {id} does not exist.")
         else:
             return {"id": user.id, "name": user.name, "email": user.email}
 
