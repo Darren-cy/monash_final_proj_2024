@@ -2,7 +2,7 @@ from http import HTTPStatus
 
 import pytest
 
-USERS = [
+USERS = (
     {"id":       1,
      "name":     "Test User",
      "email":    "test@example.com", },
@@ -11,7 +11,7 @@ USERS = [
      "email":    "alice@alicesmith.net", },
     {"id":       3,
      "name":     "Bob Smith",
-     "email":    "bobsmith57@gmail.com", }]
+     "email":    "bobsmith57@gmail.com", })
 
 
 @pytest.mark.parametrize("user", USERS)

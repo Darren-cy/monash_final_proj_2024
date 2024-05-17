@@ -3,7 +3,7 @@ import os.path
 
 import pytest
 from flask.testing import FlaskClient
-from sqlalchemy import URL, text
+from sqlalchemy import URL
 
 from dms import create_app, db
 
@@ -43,7 +43,7 @@ class AuthActions:
 
 
 with open(os.path.join(os.path.dirname(__file__), "data.sql"), "r") as file:
-    SQL_COMMANDS = text(file.read())
+    SQL_COMMANDS = file.read()
 
 
 @pytest.fixture
@@ -60,8 +60,9 @@ def app(tmp_path):
                                 Result, Submission, User,
                                 submission_attachment, submission_author)
         db.create_all()
-        db.session.execute(SQL_COMMANDS)
-        db.session.commit()
+
+        with db.engine.begin() as conn:
+            conn.connection.executescript(SQL_COMMANDS)
 
     yield app
 

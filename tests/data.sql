@@ -1,3 +1,4 @@
+-- Add users
 insert into "user" (user_name, user_email, user_password)
 values (
         "Test User",
@@ -17,3 +18,10 @@ values (
         -- qwerty
         "scrypt:32768:8:1$8Wm3hUKi2xxQxqso$945d4781fd32fdb9c32de4a2295939af600e6c6f3fc0f3cfeb9fe0e718a8eacc7a763cab566c4ec871db2fd510e4fed7f71a57a7aaab5e387ec9d650801c0936"
     );
+-- -- Add some authors
+insert into author (author_name)
+values ('Anh Nguyen'),
+    ("Emma Gonzalez"),
+    ("Isabella Rodriguez"),
+    ("Olivia Hansen"),
+    ("Ursula Smith");
