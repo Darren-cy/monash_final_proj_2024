@@ -38,10 +38,10 @@ class AssessmentSchema(Schema):
     id = fields.Integer(dump_only=True)
     name = fields.String(required=True)
     ctime = fields.DateTime(attribute="created", dump_only=True)
-    rubric = fields.Nested(DocumentSchema, dump_only=True)
+    rubric = fields.Nested(DocumentSchema(only=("id", "name")), dump_only=True)
     rubric_id = fields.Integer(data_key="rubric", load_only=True)
     criteria = fields.List(fields.Nested(CriterionSchema), required=True)
-    owner = fields.Nested(UserSchema, dump_only=True)
+    owner = fields.Nested(UserSchema(only=("id", "name")), dump_only=True)
     minMarks = fields.Int(dump_only=True)
     maxMarks = fields.Int(dump_only=True)
     submissions = fields.Nested(
