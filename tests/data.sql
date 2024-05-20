@@ -42,17 +42,61 @@ values (
         1,
         "Rubric1.pdf",
         "application/pdf",
-        "2024-05-01T09:30:00",
+        "2024-04-05T09:30:00",
         "document1",
         10240,
         1
     ),
     (
         2,
+        "Rubric2.pdf",
+        "application/pdf",
+        "2024-05-01T09:30:00",
+        "document2",
+        11568,
+        2
+    ),
+    (
+        3,
         "submission1.pdf",
         "application/pdf",
         "2024-05-10T17:45:36",
-        "document2",
+        "document3",
         76864,
-        1
+        3
     );
+
+insert into assessment (
+        assessment_id,
+        assessment_name,
+        assessment_created,
+        owner_id,
+        rubric_id
+    )
+values (
+        1,
+        "Fall of the Roman Empire",
+        "2024-04-05T09:30",
+        1,
+        1
+    ),
+    (
+        2,
+        "Book Report: The Colour Purple",
+        "2024-05-01T10:00",
+        2,
+        2
+    );
+
+insert into criterion (
+        criterion_id,
+        criterion_name,
+        criterion_min,
+        criterion_max,
+        assessment_id
+    )
+values (1, "Presentation", 0, 3, 1),
+    (2, "Spelling and grammar", 0, 3, 1),
+    (3, "Cogency of arguments", 0, 5, 1),
+    (4, "Use of primary sources", 0, 5, 1),
+    (5, "Bibliography", 0, 4, 1);

@@ -48,7 +48,8 @@ with open(os.path.join(os.path.dirname(__file__), "data.sql"), "r") as file:
 
 @pytest.fixture
 def app(tmp_path):
-    db_url = URL.create("sqlite", database=os.path.join(tmp_path, "temp.db"))
+    # db_url = URL.create("sqlite", database=os.path.join(tmp_path, "temp.db"))
+    db_url = URL.create("sqlite", database=":memory:")
 
     app = create_app({
         "TESTING": True,
