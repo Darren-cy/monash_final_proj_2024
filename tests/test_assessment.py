@@ -3,6 +3,7 @@ from http import HTTPStatus
 
 ASSESSMENT_1 = {"id": 1,
                 "name": "Fall of the Roman Empire",
+                "ctime": "2024-04-05T09:30:00",
                 "rubric": {"id": 1,
                            "name": "Rubric1.pdf"},
                 "owner": {"id": 1,
@@ -41,7 +42,6 @@ def test_get_assessments(client):
 def test_get_assessment(client):
     response = client.get("/api/v1.0/assessment/1")
     assert response.status_code == HTTPStatus.OK
-    del response.json["ctime"]
     assert response.json == ASSESSMENT_1
 
 
