@@ -1,5 +1,6 @@
 import os
 import os.path
+import atexit
 
 from dotenv import load_dotenv
 from flask import Flask, render_template
@@ -83,3 +84,9 @@ def jwt_to_user(jwt_header, jwt_data):
     from .models import User
     id = jwt_data["sub"]
     return User.query.filter_by(id=id).one_or_none()
+
+
+@atexit.register
+def close_jwt_blocklist():
+    if isinstance(jwt_blocklist, Cache):
+        jwt_blocklist.close()
