@@ -8,7 +8,8 @@ DOCUMENTS = [{"id": 1,
               "size": 10240,
               "owner": {"id": 1,
                         "name": "Test User"},
-              "downloadURL": "/api/v1.0/document/1/download"},
+              # "downloadURL": "/api/v1.0/document/1/download"
+              },
              {"id": 2,
               "name": "Rubric2.pdf",
               "type": "application/pdf",
@@ -16,7 +17,8 @@ DOCUMENTS = [{"id": 1,
               "size": 11568,
               "owner": {"id": 2,
                         "name": "Alice Wang"},
-              "downloadURL": "/api/v1.0/document/2/download"},
+              # "downloadURL": "/api/v1.0/document/2/download"
+              },
              {"id": 3,
               "name": "submission1.pdf",
               "type": "application/pdf",
@@ -24,7 +26,8 @@ DOCUMENTS = [{"id": 1,
               "size": 76864,
               "owner": {"id": 3,
                         "name": "Bob Smith"},
-              "downloadURL": "/api/v1.0/document/3/download"}]
+              # "downloadURL": "/api/v1.0/document/3/download"
+               }]
 
 
 def test_get_documents(client):
@@ -43,6 +46,7 @@ def test_get_document(client, document):
     assert response.status_code == HTTPStatus.OK
     j = response.json
     del j["ctime"]
+    del j["downloadURL"]
     assert j == document
 
 

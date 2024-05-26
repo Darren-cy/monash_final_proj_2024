@@ -16,6 +16,10 @@ class UserSchema(Schema):
 class DocumentSchema(Schema):
     id = fields.Integer(dump_only=True)
     name = fields.String()
+    type = fields.String(attribute="mime")
+    size = fields.Integer(attribute="filesize")
+    ctime = fields.DateTime(attribute="uploaded")
+    owner = fields.Nested(UserSchema(only=("id", "name")))
 
 
 class CriterionSchema(Schema):

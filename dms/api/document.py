@@ -15,6 +15,7 @@ from werkzeug.utils import secure_filename
 
 from dms.models import Document
 from dms import db
+from .schemas import DocumentSchema
 
 # FILE_UPLOAD_PATH = r"d:\projects\fitproject\instance\uploads"
 
@@ -38,12 +39,13 @@ postParser.add_argument(
 
 
 class DocumentResource(Resource):
-    @marshal_with(document_fields)
+    # @marshal_with(document_fields)
     def _get_documents(self):
         query = Select(Document)
         session = db.session
         documents = session.scalars(query).all()
-        return documents
+        return DocumentSchema(many=True).dump(documents)
+        # return documents
 
     @marshal_with(document_fields)
     def _get_document(self, id):
