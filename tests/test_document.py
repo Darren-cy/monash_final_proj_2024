@@ -34,12 +34,16 @@ def test_get_documents(client):
     del j[0]["ctime"]
     del j[1]["ctime"]
     del j[2]["ctime"]
-    assert j== DOCUMENTS
+    assert j == DOCUMENTS
 
 
-@pytest.mark.xfail
-def test_get_document(client):
-    raise NotImplementedError
+@pytest.mark.parametrize("document", DOCUMENTS)
+def test_get_document(client, document):
+    response = client.get(f"/api/v1.0/document/{document["id"]}")
+    assert response.status_code == HTTPStatus.OK
+    j = response.json
+    del j["ctime"]
+    assert j == document
 
 
 @pytest.mark.xfail
