@@ -1,4 +1,6 @@
 import os
+import os.path
+import atexit
 
 from dotenv import load_dotenv
 from flask import Flask, render_template
@@ -12,15 +14,18 @@ db: SQLAlchemy = SQLAlchemy()
 ma: Marshmallow = Marshmallow()
 migrate: Migrate = Migrate()
 jwt: JWTManager = JWTManager()
-jwt_blocklist = Cache(r"d:\blocklist")
+jwt_blocklist: Cache = None
 
 
 def create_app(test_config=None):
+    global db, ma, migrate, jwt, jwt_blocklist
     load_dotenv()
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY='dev',
         SQLALCHEMY_DATABASE_URI=os.environ.get('DATABASE_URL'),
+        FILE_UPLOAD_PATH=os.path.join(app.instance_path, "uploads"),
+        JWT_BLOCKLIST_PATH=os.path.join(app.instance_path, "blocklist"),
     )
 
     if test_config is None:
@@ -28,12 +33,14 @@ def create_app(test_config=None):
     else:
         app.config.from_mapping(test_config)
 
-    # Create the app directory if it doesn't already exist
-    try:
-        os.makedirs(app.instance_path)
-    except FileExistsError:
-        pass
-    global db
+    # Create the app directories if they don't already exist
+    os.makedirs(app.instance_path, exist_ok=True)
+    os.makedirs(app.config["FILE_UPLOAD_PATH"], exist_ok=True)
+    os.makedirs(app.config["JWT_BLOCKLIST_PATH"], exist_ok=True)
+
+    # Initialise the blocklist cache
+    jwt_blocklist = Cache(app.config["JWT_BLOCKLIST_PATH"])
+
     # Initialize the database
     db.init_app(app)
     ma.init_app(app)
@@ -77,3 +84,9 @@ def jwt_to_user(jwt_header, jwt_data):
     from .models import User
     id = jwt_data["sub"]
     return User.query.filter_by(id=id).one_or_none()
+
+
+@atexit.register
+def close_jwt_blocklist():
+    if isinstance(jwt_blocklist, Cache):
+        jwt_blocklist.close()

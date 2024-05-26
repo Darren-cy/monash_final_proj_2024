@@ -16,7 +16,7 @@ from werkzeug.utils import secure_filename
 from dms.models import Document
 from dms import db
 
-FILE_UPLOAD_PATH = r"d:\projects\fitproject\instance\uploads"
+# FILE_UPLOAD_PATH = r"d:\projects\fitproject\instance\uploads"
 
 document_fields = {
     'id': fields.Integer,
@@ -70,7 +70,7 @@ class DocumentResource(Resource):
         session = db.session
         try:
             session.add(document)
-            file.save(os.path.join(FILE_UPLOAD_PATH, document.filename))
+            file.save(os.path.join(current_app.config["FILE_UPLOAD_PATH"], document.filename))
             document.filesize = file.tell()
             session.commit()
         except (IntegrityError, FileExistsError, FileNotFoundError) as e:
@@ -84,5 +84,5 @@ class DocumentDownloadResource(Resource):
     def get(self, id):
         document: Document = db.get_or_404(Document, id)
         return send_from_directory(
-            FILE_UPLOAD_PATH, document.filename, mimetype=document.mime,
+            current_app.config["FILE_UPLOAD_PATH"], document.filename, mimetype=document.mime,
             download_name=document.name, last_modified=document.uploaded)
