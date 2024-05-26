@@ -47,9 +47,10 @@ class DocumentResource(Resource):
         return DocumentSchema(many=True).dump(documents)
         # return documents
 
-    @marshal_with(document_fields)
+    # @marshal_with(document_fields)
     def _get_document(self, id):
-        return db.get_or_404(Document, id)
+        document = db.get_or_404(Document, id)
+        return DocumentSchema().dump(document)
 
     def get(self, id=None):
         if id is None:
@@ -57,7 +58,6 @@ class DocumentResource(Resource):
         return self._get_document(id)
 
     @jwt_required()
-    @marshal_with(document_fields)
     def post(self):
         args = postParser.parse_args()
         file = args['file']
@@ -79,7 +79,7 @@ class DocumentResource(Resource):
             session.rollback()
             abort(HTTPStatus.INTERNAL_SERVER_ERROR, str(e))
         else:
-            return document
+            return DocumentSchema().dump(document)
 
 
 class DocumentDownloadResource(Resource):

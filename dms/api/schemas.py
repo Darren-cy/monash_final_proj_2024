@@ -1,4 +1,6 @@
 from marshmallow import Schema, fields
+from flask_marshmallow.fields import URLFor
+from dms import ma
 
 
 class AuthorSchema(Schema):
@@ -13,13 +15,14 @@ class UserSchema(Schema):
     password = fields.String(load_only=True)
 
 
-class DocumentSchema(Schema):
+class DocumentSchema(ma.Schema):
     id = fields.Integer(dump_only=True)
     name = fields.String()
     type = fields.String(attribute="mime")
     size = fields.Integer(attribute="filesize")
     ctime = fields.DateTime(attribute="uploaded")
     owner = fields.Nested(UserSchema(only=("id", "name")))
+    download_url = URLFor("api.documentdownloadresource", {"id": "<id>"}, data_key="downloadURL")
 
 
 class CriterionSchema(Schema):
