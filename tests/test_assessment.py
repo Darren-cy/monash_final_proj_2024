@@ -35,10 +35,11 @@ ASSESSMENT_1 = {"id": 1,
 
 @pytest.mark.xfail
 def test_get_assessments(client):
-    raise NotImplementedError
+    response = client.get("api/v1.0/assessment")
+    assert response.status_code == HTTPStatus.OK
+    assert request.json == [ASSESSMENT_1]
 
 
-# @pytest.mark.xfail
 def test_get_assessment(client):
     response = client.get("/api/v1.0/assessment/1")
     assert response.status_code == HTTPStatus.OK
