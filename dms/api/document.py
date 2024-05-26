@@ -7,7 +7,7 @@ from uuid import uuid4
 import werkzeug.datastructures
 from flask import abort, current_app, send_from_directory
 from flask_jwt_extended import current_user, jwt_required
-from flask_restful import Resource, fields, marshal_with  # type: ignore
+from flask_restful import Resource  # type: ignore
 from flask_restful.reqparse import RequestParser  # type: ignore
 from sqlalchemy import Select
 from sqlalchemy.exc import IntegrityError
@@ -17,21 +17,6 @@ from dms.models import Document
 from dms import db
 from .schemas import DocumentSchema
 
-# FILE_UPLOAD_PATH = r"d:\projects\fitproject\instance\uploads"
-
-document_fields = {
-    'id': fields.Integer,
-    'name': fields.String,
-    'type': fields.String(attribute="mime"),
-    'size': fields.Integer(attribute="filesize"),
-    "ctime": fields.DateTime(attribute="uploaded"),
-    "owner": fields.Nested({
-        "id": fields.Integer,
-        "name": fields.String,
-    }),
-    "downloadURL": fields.Url("api.documentdownloadresource"),
-}
-
 postParser = RequestParser()
 postParser.add_argument(
     'file', location='files', type=werkzeug.datastructures.FileStorage,
@@ -39,15 +24,12 @@ postParser.add_argument(
 
 
 class DocumentResource(Resource):
-    # @marshal_with(document_fields)
     def _get_documents(self):
         query = Select(Document)
         session = db.session
         documents = session.scalars(query).all()
         return DocumentSchema(many=True).dump(documents)
-        # return documents
 
-    # @marshal_with(document_fields)
     def _get_document(self, id):
         document = db.get_or_404(Document, id)
         return DocumentSchema().dump(document)
