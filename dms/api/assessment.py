@@ -31,7 +31,6 @@ class AssessmentResource(Resource):
 
     def _get_assessments(self):
         args = AssessmentResourceParamsSchema().load(request.args)
-        print(args)
         query = select(Assessment)
         if (owner_id := args["owner_id"]) is not None:
             query = query.where(Assessment.owner_id == owner_id)
