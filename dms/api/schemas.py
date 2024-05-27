@@ -15,6 +15,11 @@ class UserSchema(Schema):
     password = fields.String(load_only=True)
 
 
+class CredentialsSchema(UserSchema):
+    class Meta:
+        only = ("email", "password")
+
+
 class DocumentSchema(ma.Schema):
     id = fields.Integer(dump_only=True)
     name = fields.String()

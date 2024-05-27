@@ -1,19 +1,15 @@
 from http import HTTPStatus
 
 from email_validator import EmailNotValidError, validate_email
-from flask import abort, jsonify
+from flask import abort, jsonify, request
 from flask_jwt_extended import create_access_token, get_jwt, jwt_required
 from flask_restful import Resource  # type: ignore
-from flask_restful.reqparse import RequestParser  # type: ignore
 from sqlalchemy import select
 from sqlalchemy.exc import NoResultFound
 
 from dms import db, jwt_blocklist
 from dms.models import User
-
-parser = RequestParser()
-parser.add_argument("email", required=True)
-parser.add_argument("password", required=True)
+from .schemas import CredentialsSchema
 
 
 def abort_on_invalid_credentials():
@@ -23,7 +19,7 @@ def abort_on_invalid_credentials():
 
 class SessionResource(Resource):
     def post(self):
-        args = parser.parse_args()
+        args = CredentialsSchema().load(request.json)
         email = args['email']
         password = args['password']
         try:
