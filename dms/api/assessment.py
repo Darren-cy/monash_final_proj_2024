@@ -21,7 +21,7 @@ class AssessmentResourceParamsSchema(Schema):
     @pre_load
     def lower_fields(self, data, **kwargs):
         return {key.casefold(): value for key, value in data.items()}
-    
+
     owner_id = fields.Integer(data_key="ownerid", load_default=None)
 
 
@@ -36,7 +36,7 @@ class AssessmentResource(Resource):
         if (owner_id := args["owner_id"]) is not None:
             query = query.where(Assessment.owner_id == owner_id)
         assessments = db.session.scalars(query)
-        return AssessmentSchema(exclude=["criteria"], many=True).dump(
+        return AssessmentSchema(many=True).dump(
             assessments)
 
     def get(self, id=None):
