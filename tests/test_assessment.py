@@ -1,6 +1,7 @@
 import pytest
 from http import HTTPStatus
 from utils import dict_lists_equal
+from datetime import datetime, timedelta
 
 ASSESSMENTS = [{"id": 1,
                 "name": "Fall of the Roman Empire",
@@ -45,15 +46,8 @@ ASSESSMENTS = [{"id": 1,
                 "submissions": []}]
 
 
-# @pytest.mark.xfail
-def test_get_assessments(client):
-    response = client.get("api/v1.0/assessment")
-    assert response.status_code == HTTPStatus.OK
-    assert dict_lists_equal(response.json, ASSESSMENTS)
-
-
 NEW_ASSESSMENT = {"name": "Book Report: The Colour Purple",
-                  "rubric": 3,
+                  "rubric": 1,
                   "criteria": [{"name": "Cogency of arguments",
                                 "min": 0,
                                 "max": 25},
@@ -74,6 +68,12 @@ NEW_ASSESSMENT = {"name": "Book Report: The Colour Purple",
                                 "max": 5}]}
 
 
+def test_get_assessments(client):
+    response = client.get("api/v1.0/assessment")
+    assert response.status_code == HTTPStatus.OK
+    assert dict_lists_equal(response.json, ASSESSMENTS)
+
+
 @pytest.mark.parametrize("assessment", ASSESSMENTS)
 def test_get_assessment(client, assessment):
     response = client.get(f"/api/v1.0/assessment/{assessment["id"]}")
@@ -81,6 +81,23 @@ def test_get_assessment(client, assessment):
     assert response.json == assessment
 
 
-@pytest.mark.xfail
-def test_create_assessment(client):
-    raise NotImplementedError
+def test_create_assessment(client, auth):
+    auth.login()
+    # now = datetime.now()
+    response = client.post("/api/v1.0/assessment", json=NEW_ASSESSMENT)
+    assert response.status_code == HTTPStatus.OK
+    assessment = response.json
+    assert abs(datetime.fromisoformat(assessment["ctime"]) - datetime.now()) \
+        < timedelta(seconds=1)
+    del assessment["ctime"]
+    NEW_ASSESSMENT["id"] = 3
+    NEW_ASSESSMENT["submissions"] = []
+    NEW_ASSESSMENT["rubric"] = {"id": 1,
+                                "name": "Rubric1.pdf"}
+    NEW_ASSESSMENT["owner"] = {"id": 1,
+                               "name": "Test User"}
+    NEW_ASSESSMENT["minMarks"] = 0
+    NEW_ASSESSMENT["maxMarks"] = 100
+    for i in range(len(NEW_ASSESSMENT["criteria"])):
+        NEW_ASSESSMENT["criteria"][i]["id"] = i+6
+    assert assessment == NEW_ASSESSMENT
