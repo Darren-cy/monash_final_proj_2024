@@ -1,7 +1,8 @@
 import pytest
 from http import HTTPStatus
+from utils import dict_lists_equal
 
-ASSESSMENT_1 = {"id": 1,
+ASSESSMENTS = [{"id": 1,
                 "name": "Fall of the Roman Empire",
                 "ctime": "2024-04-05T09:30:00",
                 "rubric": {"id": 1,
@@ -30,20 +31,54 @@ ASSESSMENT_1 = {"id": 1,
                               "name": "Bibliography",
                               "min": 0,
                               "max": 4, }],
-                "submissions": []}
+                "submissions": []},
+               {"id": 2,
+                "name": "Group Presentation: Spanish Dialogue",
+                "ctime": "2024-05-01T10:00:00",
+                "rubric": {"id": 2,
+                           "name": "Rubric2.pdf"},
+                "owner": {"id": 2,
+                          "name": "Alice Wang"},
+                "minMarks": 0,
+                "maxMarks": 0,
+                "criteria": [],
+                "submissions": []}]
 
 
-@pytest.mark.xfail
+# @pytest.mark.xfail
 def test_get_assessments(client):
     response = client.get("api/v1.0/assessment")
     assert response.status_code == HTTPStatus.OK
-    assert request.json == [ASSESSMENT_1]
+    assert dict_lists_equal(response.json, ASSESSMENTS)
 
 
-def test_get_assessment(client):
-    response = client.get("/api/v1.0/assessment/1")
+NEW_ASSESSMENT = {"name": "Book Report: The Colour Purple",
+                  "rubric": 3,
+                  "criteria": [{"name": "Cogency of arguments",
+                                "min": 0,
+                                "max": 25},
+                               {"name": "Presentation",
+                                "min": 0,
+                                "max": 10},
+                               {"name": "Spelling and grammar",
+                                "min": 0,
+                                "max": 25},
+                               {"name": "Appropriate use of textual references",
+                                "min": 0,
+                                "max": 20},
+                               {"name": "Appropriate use of external references",
+                                "min": 0,
+                                "max": 15},
+                               {"name": "Bibliography",
+                                "min": 0,
+                                "max": 5}]}
+
+
+@pytest.mark.parametrize("assessment", ASSESSMENTS)
+def test_get_assessment(client, assessment):
+    response = client.get(f"/api/v1.0/assessment/{assessment["id"]}")
     assert response.status_code == HTTPStatus.OK
-    assert response.json == ASSESSMENT_1
+    assert response.json == assessment
 
 
 @pytest.mark.xfail

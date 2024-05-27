@@ -82,7 +82,7 @@ values (
     ),
     (
         2,
-        "Book Report: The Colour Purple",
+        "Group Presentation: Spanish Dialogue",
         "2024-05-01T10:00",
         2,
         2
