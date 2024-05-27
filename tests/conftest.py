@@ -54,6 +54,8 @@ def app(tmp_path):
     app = create_app({
         "TESTING": True,
         "SQLALCHEMY_DATABASE_URI": str(db_url),
+        "JWT_COOKIE_SECURE": False,
+        "JWT_COOKIE_CSRF_PROTECT": False,
     })
 
     with app.app_context():
