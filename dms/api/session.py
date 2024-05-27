@@ -2,7 +2,7 @@ from http import HTTPStatus
 
 from email_validator import EmailNotValidError, validate_email
 from flask import abort, jsonify, request
-from flask_jwt_extended import create_access_token, get_jwt, jwt_required, set_access_cookies, unset_access_cookies
+from flask_jwt_extended import create_access_token, get_jwt, jwt_required, set_access_cookies, unset_jwt_cookies
 from flask_restful import Resource  # type: ignore
 from sqlalchemy import select
 from sqlalchemy.exc import NoResultFound
@@ -48,5 +48,5 @@ class SessionResource(Resource):
         jti = get_jwt()['jti']
         jwt_blocklist.set(jti, "", expire=900)
         response = jsonify({"message": "Logged out."})
-        unset_access_cookies(response)
+        unset_jwt_cookies(response)
         return response

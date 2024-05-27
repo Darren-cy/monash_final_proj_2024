@@ -26,6 +26,7 @@ def create_app(test_config=None):
         SQLALCHEMY_DATABASE_URI=os.environ.get('DATABASE_URL'),
         FILE_UPLOAD_PATH=os.path.join(app.instance_path, "uploads"),
         JWT_BLOCKLIST_PATH=os.path.join(app.instance_path, "blocklist"),
+        JWT_TOKEN_LOCATION=["headers", "cookies"],
     )
 
     if test_config is None:
