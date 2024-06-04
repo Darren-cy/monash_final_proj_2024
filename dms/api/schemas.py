@@ -1,4 +1,6 @@
 from marshmallow import Schema, fields
+from flask_marshmallow.fields import URLFor
+from dms import ma
 
 
 class AuthorSchema(Schema):
@@ -9,11 +11,24 @@ class AuthorSchema(Schema):
 class UserSchema(Schema):
     id = fields.Integer(dump_only=True)
     name = fields.String()
+    email = fields.Email()
+    password = fields.String(load_only=True)
 
 
-class DocumentSchema(Schema):
+class CredentialsSchema(UserSchema):
+    class Meta:
+        only = ("email", "password")
+
+
+class DocumentSchema(ma.Schema):
     id = fields.Integer(dump_only=True)
     name = fields.String()
+    type = fields.String(attribute="mime")
+    size = fields.Integer(attribute="filesize")
+    ctime = fields.DateTime(attribute="uploaded")
+    owner = fields.Nested(UserSchema(only=("id", "name")))
+    download_url = URLFor(
+        "api.documentdownloadresource", {"id": "<id>"}, data_key="downloadURL")
 
 
 class CriterionSchema(Schema):
@@ -43,8 +58,8 @@ class AssessmentSchema(Schema):
     minMarks = fields.Int(dump_only=True)
     maxMarks = fields.Int(dump_only=True)
     submissions = fields.Nested(
-    lambda: SubmissionSchema(many=True, exclude=("assessment",)),
-    dump_only=True)
+        lambda: SubmissionSchema(many=True, exclude=("assessment",)),
+        dump_only=True)
 
 
 class MarksSchema(Schema):

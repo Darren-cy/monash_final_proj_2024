@@ -1,9 +1,12 @@
+from datetime import datetime
+
 from flask import request
 from flask_jwt_extended import current_user, jwt_required
 from flask_restful import Resource  # type: ignore
-from datetime import datetime
+
 from dms import db
 from dms.models import Result, Submission
+
 from .schemas import MarksSchema
 
 

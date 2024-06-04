@@ -3,12 +3,10 @@ from http import HTTPStatus
 
 from flask import abort, request
 from flask_restful import Resource  # type: ignore
-from marshmallow import Schema, fields
 from sqlalchemy import select
 
 from dms import db
 from dms.models import Assessment, Author, Document, Submission
-
 
 from flask_cors import CORS
 from .schemas import SubmissionSchema

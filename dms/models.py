@@ -1,12 +1,10 @@
-from datetime import datetime
-from typing import List, Optional
-
-from sqlalchemy import ForeignKey, Column
-from sqlalchemy.orm import Mapped, Relationship, mapped_column, validates, object_session
-from sqlalchemy.ext.hybrid import hybrid_property
-
 from . import db
-
+from datetime import datetime
+from sqlalchemy import Column, ForeignKey
+from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.orm import Mapped, Relationship, mapped_column, validates
+from typing import List, Optional
+from werkzeug.security import check_password_hash, generate_password_hash
 
 submission_author = db.Table(
     "submission_author",
@@ -31,13 +29,24 @@ class User(db.Model):
     id: Mapped[int] = mapped_column("user_id", primary_key=True)
     name: Mapped[str] = mapped_column("user_name")
     email: Mapped[str] = mapped_column("user_email", unique=True)
-    password: Mapped[str] = mapped_column("user_password")
+    _password: Mapped[str] = mapped_column("user_password")
 
     documents: Mapped[List["Document"]] = Relationship(back_populates="owner")
     assessments: Mapped["Assessment"] = Relationship(back_populates="owner")
 
+    @hybrid_property
+    def password(self) -> str:
+        return self._password
+
+    @password.setter  # type: ignore[no-redef]
+    def password(self, password):
+        self._password = generate_password_hash(password)
+
     def __repr__(self):
         return f'<User {self.name} ({self.email})>'
+
+    def check_password_hash(self, password: str) -> bool:
+        return check_password_hash(self.password, password)
 
 
 class Document(db.Model):

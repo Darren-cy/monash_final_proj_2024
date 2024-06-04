@@ -97,3 +97,7 @@ npm run dev
 ```
 
 (Instructions for development only, not suitable for distribution)
+
+## See also
+
+* [Internal API documentation>.](docs/api.md)
