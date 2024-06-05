@@ -6,7 +6,7 @@ from werkzeug.exceptions import HTTPException, NotFound
 from marshmallow.exceptions import ValidationError
 
 from .session import SessionResource
-from .user import UserResource
+from .user import UserResource, ProfileResource
 from .document import DocumentResource, DocumentDownloadResource
 from .author import AuthorResource
 from .assessment import AssessmentResource
@@ -19,6 +19,7 @@ CORS(bp, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 api = Api(bp)
 
 api.add_resource(UserResource, "/user", "/user/<int:id>")
+api.add_resource(ProfileResource, "/profile")
 api.add_resource(SessionResource, "/session")
 api.add_resource(DocumentResource, "/document", "/document/<int:id>")
 api.add_resource(DocumentDownloadResource, "/document/<int:id>/download")

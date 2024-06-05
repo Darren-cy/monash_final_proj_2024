@@ -4,6 +4,7 @@ from flask import abort, request
 from flask_restful import Resource  # type: ignore
 from sqlalchemy import select
 from sqlalchemy.exc import NoResultFound, IntegrityError
+from flask_jwt_extended import jwt_required, current_user
 
 from dms.models import User
 from dms import db
@@ -35,3 +36,10 @@ class UserResource(Resource):
             abort(HTTPStatus.CONFLICT, "Account already exists.")
         else:
             return userSchema.dump(user)
+
+
+class ProfileResource(Resource):
+    @jwt_required()
+    def get(self):
+        # print(current_user)
+        return UserSchema().dump(current_user)
