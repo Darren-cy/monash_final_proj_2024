@@ -8,6 +8,7 @@ import Profile from "./pages/Profile";
 import Home from "./pages/Home";
 import CreateAssessment from "./pages/CreateAssessment";
 import CreateSubmission from "./pages/CreateSubmission";
+import api from "./api";
 
 function Logout() {
   localStorage.clear();

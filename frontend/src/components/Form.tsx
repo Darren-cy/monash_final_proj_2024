@@ -19,19 +19,19 @@ const Form = ({ route, method }: { route: string; method: string }) => {
       if (method === "login") {
         //
         response = await api.post(route, {
-          username,
+          email,
           password,
         });
       } else {
         // If the method is register, send a POST request to the register endpoint
         response = await api.post(route, {
-          username,
-          password,
+          name: username,
           email,
+          password,
         });
       }
       if (method === "login") {
-        localStorage.setItem(ACCESS_TOKEN, response.data.accessToken);
+        localStorage.setItem(ACCESS_TOKEN, response.data[ACCESS_TOKEN]);
         navigate("/dashboard");
       } else {
         alert("User registered successfully");
@@ -42,7 +42,7 @@ const Form = ({ route, method }: { route: string; method: string }) => {
       if (method === "login") {
         alert("Invalid credentials");
       } else {
-        alert("Username already exists");
+        alert("Email already registered");
       }
     }
   };
@@ -51,11 +51,21 @@ const Form = ({ route, method }: { route: string; method: string }) => {
     <form onSubmit={handleSubmit} className="max-w-sm mx-auto p-6 bg-white shadow-md rounded-lg">
       <h1 className="text-2xl font-bold text-center mb-6">{name}</h1>
       <div className="space-y-4">
+        {method === "register" && (
+          <input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded"
+            required
+          />
+        )}
         <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           className="w-full p-2 border border-gray-300 rounded"
           required
         />
@@ -67,16 +77,7 @@ const Form = ({ route, method }: { route: string; method: string }) => {
           className="w-full p-2 border border-gray-300 rounded"
           required
         />
-        {method === "register" && (
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded"
-            required
-          />
-        )}
+        
         <button
           type="submit"
           className="w-full bg-blue-500 text-white p-3 rounded hover:bg-blue-600"

@@ -22,7 +22,7 @@ const AuthenticationPage = () => {
             {isLoginView ? "Login to Your Account" : "Register New Account"}
           </h1>
           <Form
-            route={isLoginView ? "api/v1.0/login" : "api/v1.0/register"}
+            route={isLoginView ? "api/v1.0/session" : "api/v1.0/user"}
             method={isLoginView ? "login" : "register"}
           />
           <button
