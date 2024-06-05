@@ -4,8 +4,12 @@
 
 {% block header %}
 	{% if g.user %}
-	<h1>Hello, {{ g.user.username }}!</h1>
+	<h1>Hello, {{ g.user.name }}!</h1>
 	{% else %}
 	<h1>You are not currently logged in</h1>
 	{% endif %}
+{% endblock %}
+
+{% block content %}
+<a href="{{ url_for("document.upload_file") }}">Upload a file</a>
 {% endblock %}
